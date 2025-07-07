@@ -1,5 +1,9 @@
+
+drop DATABASE IF EXISTS ef_pret_db;
+
 CREATE DATABASE IF NOT EXISTS ef_pret_db;
- USE ef_pret_db;
+
+USE ef_pret_db;
 
 CREATE TABLE ef_pret_db_etablissement_financier (
     id_etablissement_financier INT AUTO_INCREMENT PRIMARY KEY,
@@ -50,7 +54,7 @@ CREATE TABLE ef_pret_db_pret (
     id_taux_pret INT NOT NULL,
     montant DECIMAL(15, 2) NOT NULL,
     duree_mois INT NOT NULL,
-    date_pret DATE ,
+    date_pret DATE DEFAULT CURRENT_DATE,
     id_statut_pret INT NOT NULL,
     FOREIGN KEY (id_client) REFERENCES ef_pret_db_client (id_client),
     FOREIGN KEY (id_taux_pret) REFERENCES ef_pret_db_taux_pret (id_taux_pret),

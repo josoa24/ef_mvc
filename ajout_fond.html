@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="fr">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Ajout de fonds</title>
+    <script src="url.js" defer></script>
+    <script src="ajax.js" defer></script>
+    <script src="ajout_fond.js" defer></script>
+    <style>
+      body {
+        font-family: sans-serif;
+        padding: 20px;
+      }
+      input,
+      select,
+      button {
+        margin: 5px;
+        padding: 5px;
+      }
+      table {
+        border-collapse: collapse;
+        width: 100%;
+        margin-top: 20px;
+      }
+      th,
+      td {
+        border: 1px solid #ccc;
+        padding: 8px;
+        text-align: left;
+      }
+      th {
+        background-color: #f2f2f2;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>Ajout de fonds</h1>
+
+    <div>
+      <input type="hidden" id="id_ajout_fonds" />
+      <select id="id_etablissement_financier"></select>
+      <select id="id_client"></select>
+      <input type="number" id="montant" placeholder="Montant" />
+      <input type="datetime-local" id="date_ajout" />
+      <button onclick="ajouterOuModifier()">Ajouter / Modifier</button>
+    </div>
+
+    <table id="table-fonds">
+      <thead>
+        <tr>
+          <th>Client</th>
+          <th>Montant</th>
+          <th>Date</th>
+        </tr>
+      </thead>
+      <tbody></tbody>
+    </table>
+  </body>
+</html>

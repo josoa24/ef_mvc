@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="fr">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Gestion des prêts</title>
+
+    <script src="url.js" defer></script>
+    <script src="ajax.js" defer></script>
+    <script src="pret.js" defer></script>
+    <style>
+      body {
+        font-family: sans-serif;
+        padding: 20px;
+      }
+      input,
+      select,
+      button {
+        margin: 5px;
+        padding: 5px;
+      }
+      table {
+        border-collapse: collapse;
+        width: 100%;
+        margin-top: 20px;
+      }
+      th,
+      td {
+        border: 1px solid #ccc;
+        padding: 8px;
+        text-align: left;
+      }
+      th {
+        background-color: #f2f2f2;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>Gestion des prêts</h1>
+
+    <div>
+      <input type="hidden" id="id_pret" />
+      <select id="id_client"></select>
+      <select id="id_taux_pret"></select>
+      <input type="number" id="montant" placeholder="Montant" />
+      <input type="number" id="duree_mois" placeholder="Durée (mois)" />
+      <input type="date" id="date_pret" />
+      <select id="id_statut_pret"></select>
+      <button onclick="ajouterOuModifier()">Ajouter / Modifier</button>
+    </div>
+
+    <table id="table-prets">
+      <thead>
+        <tr>
+          <th>Client</th>
+          <th>Taux (%)</th>
+          <th>Montant</th>
+          <th>Durée (mois)</th>
+          <th>Date du prêt</th>
+          <th>Statut</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+      <tbody></tbody>
+    </table>
+  </body>
+</html>
