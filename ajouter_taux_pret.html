@@ -1,84 +1,175 @@
 <!DOCTYPE html>
 <html lang="fr">
 <head>
-    <meta charset="UTF-8">
-    <title>Formulaire Type de Prêt</title>
-    <style>
-        body { font-family: Arial, sans-serif; margin: 30px; }
-        label { display: inline-block; width: 150px; margin-top: 10px; }
-        input[type="text"], input[type="number"] { width: 200px; padding: 5px; }
-        .interval { margin-bottom: 10px; }
-        #intervals_container { margin-top: 10px; }
-        .interval-group { display: flex; gap: 10px; margin-bottom: 5px; align-items: center; }
-        .interval-group input { width: 100px; }
-        button { padding: 6px 12px; margin-top: 10px; cursor: pointer; }
-        .remove-btn { background-color: crimson; color: white; border: none; padding: 3px 8px; }
-    </style>
+  <meta charset="UTF-8">
+  <title>Gestion des Taux de Prêt</title>
+  <style>
+    body { font-family: sans-serif; padding: 20px; }
+    input, button { margin: 5px; padding: 5px; }
+    table { border-collapse: collapse; width: 100%; margin-top: 20px; }
+    th, td { border: 1px solid #ccc; padding: 8px; text-align: left; }
+    th { background-color: #f2f2f2; }
+    .interval-group { display: flex; gap: 10px; margin-bottom: 5px; align-items: center; }
+    .interval-group input { width: 100px; }
+    .remove-btn { background-color: crimson; color: white; border: none; padding: 3px 8px; cursor: pointer; }
+  </style>
 </head>
 <body>
 
-<h2>Définir les Taux pour un Type de Prêt</h2>
+  <h1>Gestion des Taux de Prêt</h1>
 
-<form id="pret_form">
-    <label for="type_pret">Type de prêt:</label>
-    <input type="text" id="type_pret" name="type_pret" required><br>
+  <div>
+    <input type="text" id="type_pret" placeholder="Type de prêt" required>
+    <input type="number" id="inf_mois" placeholder="Inf. à (mois)" required>
+    <input type="number" step="0.01" id="inf_taux" placeholder="Taux %" required>
+    <input type="number" id="sup_mois" placeholder="Sup. à (mois)" required>
+    <input type="number" step="0.01" id="sup_taux" placeholder="Taux %" required>
+  </div>
 
-    <label for="inf_mois">Inférieur à (mois):</label>
-    <input type="number" id="inf_mois" name="inf_mois" required>
-    <label for="inf_taux">Taux:</label>
-    <input type="number" step="0.01" id="inf_taux" name="inf_taux" required><br>
-
-    <div id="intervals_container">
-        <label>Intervalles (min, max, taux):</label><br>
-        <div class="interval-group">
-            <input type="number" name="min[]" placeholder="Min (mois)" required>
-            <input type="number" name="max[]" placeholder="Max (mois)" required>
-            <input type="number" step="0.01" name="taux[]" placeholder="Taux (%)" required>
-        </div>
+  <h3>Intervalles de Taux</h3>
+  <div id="intervals_container">
+    <div class="interval-group">
+      <input type="number" placeholder="Min (mois)" class="min" required>
+      <input type="number" placeholder="Max (mois)" class="max" required>
+      <input type="number" step="0.01" placeholder="Taux (%)" class="taux" required>
     </div>
-    <button type="button" onclick="ajouter_intervalle()">+ Ajouter Intervalle</button><br>
+  </div>
+  <button onclick="ajouterIntervalle()">+ Ajouter Intervalle</button>
+  <button onclick="enregistrerTaux()">Enregistrer</button>
 
-    <label for="sup_mois">Supérieur à (mois):</label>
-    <input type="number" id="sup_mois" name="sup_mois" required>
-    <label for="sup_taux">Taux:</label>
-    <input type="number" step="0.01" id="sup_taux" name="sup_taux" required><br>
+  <div id="liste-taux"></div>
 
-    <button type="submit">Enregistrer</button>
-</form>
 
-<script>
-    function ajouter_intervalle() {
-        const container = document.getElementById("intervals_container");
-        const group = document.createElement("div");
-        group.classList.add("interval-group");
+  <script>
+    const apiBase = "http://localhost/S4/ef_mvc/ws";
+    function ajouterIntervalle() {
+      const container = document.getElementById("intervals_container");
+      const group = document.createElement("div");
+      group.classList.add("interval-group");
 
-        group.innerHTML = `
-            <input type="number" name="min[]" placeholder="Min (mois)" required>
-            <input type="number" name="max[]" placeholder="Max (mois)" required>
-            <input type="number" step="0.01" name="taux[]" placeholder="Taux (%)" required>
-            <button type="button" class="remove-btn" onclick="this.parentElement.remove()">×</button>
-        `;
-        container.appendChild(group);
+      group.innerHTML = `
+        <input type="number" placeholder="Min (mois)" class="min" required>
+        <input type="number" placeholder="Max (mois)" class="max" required>
+        <input type="number" step="0.01" placeholder="Taux (%)" class="taux" required>
+        <button type="button" class="remove-btn" onclick="this.parentElement.remove()">×</button>
+      `;
+      container.appendChild(group);
+    }
+    function enregistrerTaux() {
+    const typePret = document.getElementById("type_pret").value;
+    const infMois = document.getElementById("inf_mois").value;
+    const infTaux = document.getElementById("inf_taux").value;
+    const supMois = document.getElementById("sup_mois").value;
+    const supTaux = document.getElementById("sup_taux").value;
+
+    const minInputs = document.querySelectorAll(".min");
+    const maxInputs = document.querySelectorAll(".max");
+    const tauxInputs = document.querySelectorAll(".taux");
+
+    const formData = new FormData();
+    formData.append("type_pret", typePret);
+    formData.append("inf_mois", infMois);
+    formData.append("inf_taux", infTaux);
+    formData.append("sup_mois", supMois);
+    formData.append("sup_taux", supTaux);
+
+    for (let i = 0; i < minInputs.length; i++) {
+      formData.append("min[]", minInputs[i].value);
+      formData.append("max[]", maxInputs[i].value);
+      formData.append("taux[]", tauxInputs[i].value);
     }
 
-    document.getElementById("pret_form").addEventListener("submit", function (e) {
-        e.preventDefault();
-        const form_data = new FormData(this);
-
-        fetch("/pret_taux/ajouter", {
-            method: "GET",
-            body: form_data
-        })
-        .then(res => res.text())
-        .then(data => {
-            alert("Taux enregistrés avec succès !");
-            console.log(data);
-        })
-        .catch(err => {
-            console.error("Erreur AJAX:", err);
-        });
+    fetch(apiBase + "/taux_pret/ajouter", {
+      method: "POST",
+      body: formData
+    })
+    .then(res => res.json())
+    .then(data => {
+      if (data.success) {
+        alert("Taux enregistrés avec succès !");
+        resetForm();
+      } else {
+        alert("Erreur : " + data.message);
+      }
+    })
+    .catch(err => {
+      console.error("Erreur AJAX:", err);
     });
-</script>
+  }
+    function resetForm() {
+      document.getElementById("type_pret").value = "";
+      document.getElementById("inf_mois").value = "";
+      document.getElementById("inf_taux").value = "";
+      document.getElementById("sup_mois").value = "";
+      document.getElementById("sup_taux").value = "";
+      document.getElementById("intervals_container").innerHTML = `
+        <div class="interval-group">
+          <input type="number" placeholder="Min (mois)" class="min" required>
+          <input type="number" placeholder="Max (mois)" class="max" required>
+          <input type="number" step="0.01" placeholder="Taux (%)" class="taux" required>
+        </div>
+      `;
+    }
+  
+    function chargerTaux() {
+  fetch(apiBase + "/taux_pret")
+    .then(res => res.json())
+    .then(data => {
+      const container = document.getElementById("liste-taux");
+      container.innerHTML = "";
+
+      data.forEach(row => {
+        const div = document.createElement("div");
+        div.style.border = "1px solid #ccc";
+        div.style.padding = "10px";
+        div.style.margin = "10px 0";
+        div.style.borderRadius = "6px";
+        div.style.backgroundColor = "#f9f9f9";
+
+        let html = `<h3>${row.type}</h3>`;
+        html += `<p><strong>0 à ${row.inf_mois} mois</strong> : ${row.inf_taux} %</p>`;
+
+        if (row.intervalles.length > 0) {
+          html += `<p><strong>Intervalles :</strong><br>`;
+          row.intervalles.forEach(interval => {
+            html += `${interval}<br>`;
+          });
+          html += `</p>`;
+        }
+
+        html += `<p><strong>> ${row.sup_mois} mois</strong> : ${row.sup_taux} %</p>`;
+
+        div.innerHTML = html;
+        container.appendChild(div);
+      });
+    });
+}
+
+chargerTaux();
+
+// Après insertion
+function enregistrerTaux() {
+  // ... formulaire ...
+  fetch(apiBase + "/taux_pret/ajouter", {
+    method: "POST",
+    body: formData
+  })
+  .then(res => res.json())
+  .then(data => {
+    if (data.success) {
+      alert("Taux enregistrés avec succès !");
+      resetForm();
+      chargerTaux(); // recharger les taux
+    } else {
+      alert("Erreur : " + data.message);
+    }
+  })
+  .catch(err => {
+    console.error("Erreur AJAX:", err);
+  });
+}
+
+  </script>
 
 </body>
 </html>

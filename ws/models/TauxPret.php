@@ -9,6 +9,47 @@ class TauxPret {
         $this->db = getDB(); 
     }
 
+    public function getAllTaux() {
+        $sql = "
+            SELECT t.nom_type_pret, p.taux, p.min_mois, p.max_mois
+            FROM ef_pret_db_type_pret t
+            JOIN ef_pret_db_taux_pret p ON t.id_type_pret = p.id_type_pret
+            ORDER BY t.nom_type_pret, p.min_mois
+        ";
+        $stmt = $this->db->query($sql);
+        $taux = $stmt->fetchAll(PDO::FETCH_ASSOC);
+    
+        $grouped = [];
+        foreach ($taux as $row) {
+            $type = $row['nom_type_pret'];
+            if (!isset($grouped[$type])) {
+                $grouped[$type] = [];
+            }
+            $grouped[$type][] = $row;
+        }
+    
+        $output = [];
+        foreach ($grouped as $type => $intervalles) {
+            $inf = $intervalles[0];
+            $sup = end($intervalles);
+    
+            $interv = array_slice($intervalles, 1, -1);
+            $output[] = [
+                "type" => $type,
+                "inf_mois" => $inf['max_mois'],
+                "inf_taux" => $inf['taux'],
+                "sup_mois" => $sup['min_mois'] - 1,
+                "sup_taux" => $sup['taux'],
+                "intervalles" => array_map(function ($x) {
+                    return $x['min_mois'] . "-" . $x['max_mois'] . ": " . $x['taux'] . "%";
+                }, $interv)
+            ];
+        }
+    
+        return $output;
+    }
+    
+
     public function ajouter_pret_et_taux($type, $infMois, $infTaux, $mins, $maxs, $tauxs, $supMois, $supTaux) {
         $this->db->beginTransaction();
 
