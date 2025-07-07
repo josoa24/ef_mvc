@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="fr">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Document</title>
+    <script>
+      function envoyerPret() {
+        const apiBase = "http://localhost/S4/ef_mvc/ws";
+        const formData = new FormData();
+        formData.append("montant", document.getElementById("montant").value);
+        formData.append("mois", document.getElementById("mois").value);
+
+        fetch(apiBase + "/pret/creerpdf", {
+          method: "POST",
+          body: formData,
+        })
+          .then((res) => res.blob())
+          .then((blob) => {
+            const url = window.URL.createObjectURL(blob);
+            const a = document.createElement("a");
+            a.href = url;
+            a.download = "pret.pdf";
+            a.click();
+          })
+          .catch((err) => console.error("Erreur PDF :", err));
+      }
+    </script>
+  </head>
+  <body>
+    <h2>Création de Prêt</h2>
+    <input
+      type="number"
+      id="montant"
+      placeholder="Montant du prêt"
+      required
+    /><br />
+    <input type="number" id="mois" placeholder="Durée (mois)" required /><br />
+    <button onclick="envoyerPret()">Soumettre</button>
+  </body>
+</html>
