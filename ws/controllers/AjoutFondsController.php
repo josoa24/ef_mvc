@@ -34,4 +34,6 @@ class AjoutFondsController
         AjoutFonds::delete($id);
         Flight::json(['message' => 'Ajout de fonds supprimé']);
     }
+
+    
 }

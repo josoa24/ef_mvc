@@ -2,10 +2,11 @@
 <html lang="fr">
   <head>
     <meta charset="UTF-8" />
-    <title>Ajout de fonds</title>
+    <title>Gestion des prêts</title>
+
     <script src="url.js" defer></script>
     <script src="ajax.js" defer></script>
-    <script src="ajout_fond.js" defer></script>
+    <script src="pret.js" defer></script>
     <style>
       body {
         font-family: sans-serif;
@@ -34,23 +35,29 @@
     </style>
   </head>
   <body>
-    <h1>Ajout de fonds</h1>
+    <h1>Gestion des prêts</h1>
 
     <div>
-      <input type="hidden" id="id_ajout_fonds" />
-      <select id="id_etablissement_financier"></select>
+      <input type="hidden" id="id_pret" />
       <select id="id_client"></select>
+      <select id="id_taux_pret"></select>
       <input type="number" id="montant" placeholder="Montant" />
-      <input type="datetime-local" id="date_ajout" />
+      <input type="number" id="duree_mois" placeholder="Durée (mois)" />
+      <input type="date" id="date_pret" />
+      <select id="id_statut_pret"></select>
       <button onclick="ajouterOuModifier()">Ajouter / Modifier</button>
     </div>
 
-    <table id="table-fonds">
+    <table id="table-prets">
       <thead>
         <tr>
           <th>Client</th>
+          <th>Taux (%)</th>
           <th>Montant</th>
-          <th>Date</th>
+          <th>Durée (mois)</th>
+          <th>Date du prêt</th>
+          <th>Statut</th>
+          <th>Actions</th>
         </tr>
       </thead>
       <tbody></tbody>

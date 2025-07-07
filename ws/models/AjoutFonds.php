@@ -74,4 +74,17 @@ class AjoutFonds
         $stmt = $db->prepare("DELETE FROM ef_pret_db_ajout_fonds WHERE id_ajout_fonds = ?");
         $stmt->execute([$id]);
     }
+
+    public static function getSoldeClient($id_client)
+    {
+        $db = getDB();
+        $stmt = $db->prepare("
+        SELECT SUM(montant) as solde
+        FROM ef_pret_db_ajout_fonds
+        WHERE id_client = ?
+    ");
+        $stmt->execute([$id_client]);
+        $result = $stmt->fetch(PDO::FETCH_ASSOC);
+        return $result ? $result['solde'] : 0;
+    }
 }

@@ -4,8 +4,9 @@ require 'db.php';
 
 
 require 'routes/etudiant_routes.php';
-require 'routes/etablissement_financier.php';
-require 'routes/client.php';
-require 'routes/ajout_fonds.php';
+require 'routes/etablissement_financier_routes.php';
+require 'routes/client_routes.php';
+require 'routes/ajout_fonds_routes.php';
+require 'routes/pret_routes.php';
 
 Flight::start();
