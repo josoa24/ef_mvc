@@ -1,3 +1,4 @@
+
 drop DATABASE IF EXISTS ef_pret_db;
 
 CREATE DATABASE IF NOT EXISTS ef_pret_db;
