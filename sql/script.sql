@@ -1,4 +1,5 @@
-CREATE DATABASE IF NOT EXISTS ef_pret_db USE ef_pret_db;
+CREATE DATABASE IF NOT EXISTS ef_pret_db;
+ USE ef_pret_db;
 
 CREATE TABLE ef_pret_db_etablissement_financier (
     id_etablissement_financier INT AUTO_INCREMENT PRIMARY KEY,
@@ -16,12 +17,12 @@ CREATE TABLE ef_pret_db_client (
 
 CREATE TABLE ef_pret_db_ajout_fonds (
     id_ajout_fonds INT AUTO_INCREMENT PRIMARY KEY,
-    ef_id INT NOT NULL,
-    client_id INT NOT NULL,
+    id_etablissement_financier INT NOT NULL,
+    id_client INT NOT NULL,
     montant DECIMAL(15, 2) NOT NULL,
     date_ajout DATETIME DEFAULT CURRENT_TIMESTAMP,
-    FOREIGN KEY (ef_id) REFERENCES etablissement_financier (id),
-    FOREIGN KEY (client_id) REFERENCES client (id)
+    FOREIGN KEY (id_etablissement_financier) REFERENCES ef_pret_db_etablissement_financier (id_etablissement_financier),
+    FOREIGN KEY (id_client) REFERENCES ef_pret_db_client (id_client)
 );
 
 CREATE TABLE ef_pret_db_type_pret (
@@ -31,11 +32,11 @@ CREATE TABLE ef_pret_db_type_pret (
 
 CREATE TABLE ef_pret_db_taux_pret (
     id_taux_pret INT AUTO_INCREMENT PRIMARY KEY,
-    type_pret_id INT NOT NULL,
+    id_type_pret INT NOT NULL,
     taux DECIMAL(5, 2) NOT NULL,
     min_mois INT NOT NULL,
     max_mois INT NOT NULL,
-    FOREIGN KEY (type_pret_id) REFERENCES type_pret (id)
+    FOREIGN KEY (id_type_pret) REFERENCES ef_pret_db_type_pret (id_type_pret)
 );
 
 CREATE TABLE ef_pret_db_statut_pret (
@@ -45,13 +46,13 @@ CREATE TABLE ef_pret_db_statut_pret (
 
 CREATE TABLE ef_pret_db_pret (
     id_pret INT AUTO_INCREMENT PRIMARY KEY,
-    client_id INT NOT NULL,
-    taux_pret_id INT NOT NULL,
+    id_client INT NOT NULL,
+    id_taux_pret INT NOT NULL,
     montant DECIMAL(15, 2) NOT NULL,
     duree_mois INT NOT NULL,
-    date_pret DATE DEFAULT CURRENT_DATE,
-    statut_id INT NOT NULL,
-    FOREIGN KEY (client_id) REFERENCES client (id),
-    FOREIGN KEY (taux_pret_id) REFERENCES taux_pret (id),
-    FOREIGN KEY (statut_id) REFERENCES statut_pret (id)
+    date_pret DATE ,
+    id_statut_pret INT NOT NULL,
+    FOREIGN KEY (id_client) REFERENCES ef_pret_db_client (id_client),
+    FOREIGN KEY (id_taux_pret) REFERENCES ef_pret_db_taux_pret (id_taux_pret),
+    FOREIGN KEY (id_statut_pret) REFERENCES ef_pret_db_statut_pret (id_statut_pret)
 );
