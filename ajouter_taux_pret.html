@@ -88,6 +88,7 @@
       if (data.success) {
         alert("Taux enregistrés avec succès !");
         resetForm();
+        chargerTaux();
       } else {
         alert("Erreur : " + data.message);
       }
@@ -147,27 +148,6 @@
 
 chargerTaux();
 
-// Après insertion
-function enregistrerTaux() {
-  // ... formulaire ...
-  fetch(apiBase + "/taux_pret/ajouter", {
-    method: "POST",
-    body: formData
-  })
-  .then(res => res.json())
-  .then(data => {
-    if (data.success) {
-      alert("Taux enregistrés avec succès !");
-      resetForm();
-      chargerTaux(); // recharger les taux
-    } else {
-      alert("Erreur : " + data.message);
-    }
-  })
-  .catch(err => {
-    console.error("Erreur AJAX:", err);
-  });
-}
 
   </script>
 
