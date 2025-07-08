@@ -9,6 +9,7 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <link rel="stylesheet" href="assets/css/interets_graphique.css">
     <link rel="stylesheet" href="assets/css/acceuil.css">
+    <script src="url.js"></script> <!-- Assure-toi que apiBase est défini ici -->
 </head>
 
 <body>
@@ -71,7 +72,7 @@
                 <li class="nav-item">
                     <a href="interets_graphique.html" class="nav-link">
                         <i class="fas fa-chart-line"></i>
-                        <span>Interets Gagnés</span>
+                        <span>Intérêts Gagnés</span>
                     </a>
                 </li>
                 <li class="nav-item">
@@ -103,7 +104,7 @@
             <thead>
                 <tr>
                     <th>Mois/Année</th>
-                    <th>Intérêts (€)</th>
+                    <th>Intérêts (Ariary)</th>
                 </tr>
             </thead>
             <tbody id="table-body"></tbody>
@@ -115,7 +116,90 @@
     </div>
 
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <script src="assets/js/interets_graphique.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const filterBtn = document.getElementById('filter-btn');
+            const tableBody = document.getElementById('table-body');
+            const chartCanvas = document.getElementById('interests-chart');
+            let chart;
+
+            function fetchInterets(start = '', end = '') {
+                const params = new URLSearchParams();
+                if (start) params.append('start', start);
+                if (end) params.append('end', end);
+
+                fetch(apiBase + `/interets?${params.toString()}`)
+                    .then(response => response.json())
+                    .then(data => {
+                        tableBody.innerHTML = '';
+                        const labels = [];
+                        const values = [];
+
+                        data.forEach(item => {
+                            const moisAnnee = `${String(item.mois).padStart(2, '0')}/${item.annee}`;
+                            const interet = parseFloat(item.interet_total).toFixed(2);
+
+                            tableBody.innerHTML += `
+                                <tr>
+                                    <td>${moisAnnee}</td>
+                                    <td>${interet}</td>
+                                </tr>
+                            `;
+
+                            labels.push(moisAnnee);
+                            values.push(interet);
+                        });
+
+                        renderChart(labels, values);
+                    })
+                    .catch(error => console.error("Erreur AJAX :", error));
+            }
+
+            function renderChart(labels, values) {
+                if (chart) chart.destroy();
+                chart = new Chart(chartCanvas, {
+                    type: 'line',
+                    data: {
+                        labels: labels,
+                        datasets: [{
+                            label: 'Intérêts (Ariary)',
+                            data: values,
+                            fill: false,
+                            tension: 0.3,
+                            backgroundColor: 'rgba(54, 162, 235, 0.6)',
+                            borderColor: 'rgba(54, 162, 235, 1)',
+                            borderWidth: 2,
+                            pointBackgroundColor: '#fff',
+                            pointBorderColor: 'rgba(54, 162, 235, 1)',
+                            pointRadius: 4
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        scales: {
+                            y: {
+                                beginAtZero: true
+                            }
+                        },
+                        plugins: {
+                            legend: {
+                                display: true
+                            }
+                        }
+                    }
+                });
+            }
+
+            filterBtn.addEventListener('click', () => {
+                const start = document.getElementById('start-date').value;
+                const end = document.getElementById('end-date').value;
+                fetchInterets(start, end);
+            });
+
+            // Chargement initial
+            fetchInterets();
+        });
+    </script>
 </body>
 
 </html>
