@@ -119,11 +119,6 @@ class Pret
         if (!$row) throw new Exception("Aucun taux trouvé pour cette durée et ce type de prêt");
 
         $taux = $row['taux'];
-
-        // Mensualité calculée : formule d’annuité constante
-        // $r = $taux / 100 / 12;
-        // $mensualite = ($montant * $r) / (1 - pow(1 + $r, -$mois));
-        // $mensualite = round($mensualite, 2);
         $totalInteret = ($montant * $taux) / 100;
         $mensualite = ($montant + $totalInteret) / $mois;
 

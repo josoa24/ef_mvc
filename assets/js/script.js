@@ -29,7 +29,7 @@ function openModal(modalId) {
   if (modal) {
     modal.classList.add("show");
     modal.style.display = "flex";
-    appState.modals[modalId] = true;
+    // appState.modals[modalId] = true;
 
     const firstInput = modal.querySelector("input, select");
     if (firstInput) {

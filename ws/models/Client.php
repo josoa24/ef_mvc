@@ -50,4 +50,58 @@ class Client
         $stmt = $db->prepare("DELETE FROM ef_pret_db_client WHERE id_client = ?");
         $stmt->execute([$id]);
     }
+
+    public static function getLastMonthIncrease()
+    {
+        $db = getDB();
+
+        $stmt = $db->prepare("
+        SELECT 
+            DATE_FORMAT(created_at, '%Y-%m') AS mois, 
+            COUNT(*) AS nb_clients
+        FROM ef_pret_db_client
+        WHERE created_at >= DATE_FORMAT(DATE_SUB(CURDATE(), INTERVAL 2 MONTH), '%Y-%m-01')
+        GROUP BY mois
+        ORDER BY mois DESC
+        LIMIT 2
+    ");
+        $stmt->execute();
+        $resultats = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+        if (count($resultats) < 2) {
+           
+            return [
+                'mois_recent' => $resultats[0]['mois'] ?? null,
+                'augmentation_pct' => null,
+                'message' => 'Pas assez de données pour calculer l’augmentation.'
+            ];
+        }
+
+      
+        $mois_recent = $resultats[0]['mois'];
+        $clients_recent = (int)$resultats[0]['nb_clients'];
+
+        $mois_precedent = $resultats[1]['mois'];
+        $clients_precedent = (int)$resultats[1]['nb_clients'];
+
+        if ($clients_precedent == 0) {
+            $augmentation_pct = null; 
+        } else {
+            $augmentation_pct = (($clients_recent - $clients_precedent) / $clients_precedent) * 100;
+        }
+
+        return [
+            'mois_recent' => $mois_recent,
+            'augmentation_pct' => round($augmentation_pct, 2)
+        ];
+    }
+
+        public static function getCount()
+    {
+        $db = getDB();
+        $stmt = $db->query("SELECT COUNT(*) as total_clients FROM ef_pret_db_client");
+        $result = $stmt->fetch(PDO::FETCH_ASSOC);
+        return (int)$result['total_clients'];
+    }
+
 }
