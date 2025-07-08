@@ -9,30 +9,17 @@ function chargerClients() {
 }
 
 function chargerTaux() {
-  //   ajax("GET", "/taux_pret", null, (data) => {
-  //     const select = document.getElementById("id_taux_pret");
-  //     select.innerHTML = '<option value="">-- Sélectionner un taux --</option>';
-  //     data.forEach((t) => {
-  //       select.innerHTML += `<option value="${t.id_taux_pret}">${t.taux}% (${t.min_mois}-${t.max_mois} mois)</option>`;
-  //     });
-  //   });
-
-  const select = document.getElementById("id_taux_pret");
-  select.innerHTML = '<option value="">-- Sélectionner un taux --</option>';
-  select.innerHTML += `<option value="1">Test</option>`;
+  ajax("GET", "/getAllWidthType", null, (data) => {
+    const select = document.getElementById("id_taux_pret");
+    select.innerHTML = '<option value="">-- Sélectionner un taux --</option>';
+    data.forEach((t) => {
+      select.innerHTML += `<option value="${t.id_taux_pret}">${t.nom_type_pret}</option>`;
+    });
+  });
 }
 
 function chargerStatuts() {
-  //   ajax("GET", "/statut_pret", null, (data) => {
-  //     const select = document.getElementById("id_statut_pret");
-  //     select.innerHTML = '<option value="">-- Sélectionner un statut --</option>';
-  //     data.forEach((s) => {
-  //       select.innerHTML += `<option value="${s.id_statut_pret}">${s.libelle}</option>`;
-  //     });
-  //   });
-  const select = document.getElementById("id_statut_pret");
-  select.innerHTML = '<option value="">-- Sélectionner un statut --</option>';
-  select.innerHTML += `<option value="1">Andrana</option>`;
+  document.getElementById("id_statut_pret").value = "1";
 }
 
 function chargerPrets() {
@@ -44,19 +31,13 @@ function chargerPrets() {
       const tr = document.createElement("tr");
       const datePret = new Date(p.date_pret).toLocaleDateString("fr-FR");
       tr.innerHTML = `
-            <td>${p.nom_client}</td>
-            <td>${p.taux}</td>
-            <td>${p.montant}</td>
-            <td>${p.duree_mois}</td>
-            <td>${datePret}</td>
-            <td>${p.statut}</td>
-            <td>
-              <button onclick='remplirFormulaire(${JSON.stringify(
-                p
-              )})'>✏️</button>
-              <button onclick='supprimerPret(${p.id_pret})'>🗑️</button>
-            </td>
-          `;
+        <td>${p.nom_client}</td>
+        <td>${p.taux}</td>
+        <td>${p.montant}</td>
+        <td>${p.duree_mois}</td>
+        <td>${datePret}</td>
+        <td>${p.statut}</td>
+      `;
       tbody.appendChild(tr);
     });
   });
@@ -91,10 +72,10 @@ function ajouterOuModifier() {
   if (id) {
     ajax("PUT", `/pret/${id}`, data, () => {
       resetForm();
-      alert("akhjd");
       chargerPrets();
     });
   } else {
+    envoyerPret(duree, montant, client, taux);
     ajax("POST", "/pret", data, () => {
       resetForm();
       chargerPrets();
@@ -117,7 +98,29 @@ function resetForm() {
   document.getElementById("montant").value = "";
   document.getElementById("duree_mois").value = "";
   document.getElementById("date_pret").value = "";
-  document.getElementById("id_statut_pret").value = "";
+  document.getElementById("id_statut_pret").value = "1";
+}
+
+function envoyerPret(nombreRemboursements, montant, id_client, id_type_pret) {
+  const formData = new FormData();
+  formData.append("montant", montant);
+  formData.append("mois", nombreRemboursements);
+  formData.append("id_client", id_client);
+  formData.append("id_type_pret", id_type_pret);
+
+  fetch(apiBase + "/pret/creerpdf", {
+    method: "POST",
+    body: formData,
+  })
+    .then((res) => res.blob())
+    .then((blob) => {
+      const url = window.URL.createObjectURL(blob);
+      const a = document.createElement("a");
+      a.href = url;
+      a.download = "pret.pdf";
+      a.click();
+    })
+    .catch((err) => console.error("Erreur PDF :", err));
 }
 
 window.onload = () => {

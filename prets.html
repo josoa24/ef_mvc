@@ -39,8 +39,8 @@
       </div>
       <nav class="sidebar-nav">
         <ul>
-          <li class="nav-item active">
-            <a href="dashboard.html" class="nav-link"
+          <li class="nav-item">
+            <a href="accueil.html" class="nav-link"
               ><i class="fas fa-tachometer-alt"></i
               ><span>Tableau de Bord</span></a
             >
@@ -55,13 +55,13 @@
               ><i class="fas fa-users"></i><span>Clients</span></a
             >
           </li>
-          <li class="nav-item">
+          <li class="nav-item active">
             <a href="prets.html" class="nav-link"
               ><i class="fas fa-money-check-alt"></i><span>Prêts</span></a
             >
           </li>
           <li class="nav-item">
-            <a href="fonds.html" class="nav-link"
+            <a href="ajout_fonds.html" class="nav-link"
               ><i class="fas fa-piggy-bank"></i><span>Fonds</span></a
             >
           </li>
@@ -129,9 +129,6 @@
         <button class="btn btn-primary" onclick="openModal('addLoanModal')">
           <i class="fas fa-plus"></i>Nouveau Prêt
         </button>
-        <button class="btn btn-success" onclick="openModal('addFundsModal')">
-          <i class="fas fa-plus"></i>Ajouter Fonds
-        </button>
       </div>
 
       <div class="data-section">
@@ -149,7 +146,6 @@
                 <th>Durée (mois)</th>
                 <th>Date du prêt</th>
                 <th>Statut</th>
-                <th>Actions</th>
               </tr>
             </thead>
             <tbody></tbody>
@@ -286,6 +282,5 @@
     <script src="ajax.js" defer></script>
     <script src="pret.js" defer></script>
     <script src="assets/js/script.js" defer></script>
-    <script src="ajout_fond.js" defer></script>
   </body>
 </html>

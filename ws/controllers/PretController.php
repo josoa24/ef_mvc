@@ -1,7 +1,7 @@
 <?php
 require_once __DIR__ . '/../models/Pret.php';
 require_once __DIR__ . '/../../fpdf186/fpdf.php';
-  
+
 class PretController
 {
     public static function getAll()
@@ -27,10 +27,10 @@ class PretController
         $id_client = $data->id_client;
         $montant_pret = (float) $data->montant;
 
-       
+
         $solde_disponible = AjoutFonds::getSoldeClient($id_client);
 
-        
+
         if ($montant_pret > $solde_disponible) {
             Flight::json([
                 'error' => "Solde insuffisant. Solde disponible : {$solde_disponible} Ar, montant demandé : {$montant_pret} Ar"
@@ -38,7 +38,7 @@ class PretController
             return;
         }
 
-       
+
         $id = Pret::create($data);
         Flight::json(['message' => 'Prêt créé', 'id' => $id]);
     }
@@ -54,14 +54,15 @@ class PretController
         Pret::delete($id);
         Flight::json(['message' => 'Prêt supprimé']);
     }
-  public static function creerpdf() {
+    public static function creerpdf()
+    {
         $data = Flight::request()->data->getData();
         $model = new Pret();
 
         try {
             $pretInfo = $model->calculerRemboursement(
-                1, 
-                1,
+                $data['id_client'],
+                $data['id_type_pret'],
                 $data['montant'],
                 $data['mois']
             );
@@ -70,29 +71,33 @@ class PretController
                 ob_end_clean();
             }
 
-            // Initialisation du PDF
+
             $pdf = new FPDF();
             $pdf->AddPage();
 
-            // En-tête
+
             $pdf->SetFont('Arial', 'B', 18);
-            $pdf->SetTextColor(0, 102, 204); // bleu
+            $pdf->SetTextColor(0, 102, 204);
             $pdf->Cell(0, 10, "FICHE DE PRET", 0, 1, 'C');
             $pdf->Ln(3);
 
-            // Ligne de séparation
+
             $pdf->SetDrawColor(0, 102, 204);
             $pdf->SetLineWidth(0.8);
             $pdf->Line(10, $pdf->GetY(), 200, $pdf->GetY());
             $pdf->Ln(10);
 
-            // Données
-            $pdf->SetFont('Arial', '', 12);
-            $pdf->SetTextColor(0); // reset color
 
+            $pdf->SetFont('Arial', '', 12);
+            $pdf->SetTextColor(0);
+            $client_model = new Client();
+            $nom_client = $client_model->getById($data['id_client'])['nom_client'] ?? 'Inconnu';
+            $taux_model = new TauxPret();
+
+            $nom_type_pret = $taux_model->getTypePretByIdTauxPret($data['id_type_pret'])['nom_type_pret'] ?? 'Inconnu';
             $infos = [
-                "Nom du client"    => "Mirana",
-                "Type de pret"     => "Pret etudiant",
+                "Nom du client"    => $nom_client,
+                "Type de pret"     => $nom_type_pret,
                 "Montant"          => number_format($data['montant'], 2, '.', ' ') . " Ar",
                 "Duree"            => $data['mois'] . " mois",
                 "Taux applique"    => $pretInfo['taux'] . " %"
@@ -107,24 +112,22 @@ class PretController
                 $pdf->Cell(0, 10, $value, 0, 1);
             }
 
-            // Encadré mensualité
             $pdf->Ln(15);
             $pdf->SetFont('Arial', '', 13);
             $pdf->SetFillColor(230, 250, 255);
-            $pdf->Cell(0, 12, "Remboursement Mensuel : ".number_format($pretInfo['mensualite'], 2, '.', ' ') . " Ar / mois", 1, 1, 'C', true);
+            $pdf->Cell(0, 12, "Remboursement Mensuel : " . number_format($pretInfo['mensualite'], 2, '.', ' ') . " Ar / mois", 1, 1, 'C', true);
 
-            // Pied de page
+
             $pdf->Ln(15);
             $pdf->SetFont('Arial', 'I', 10);
             $pdf->SetTextColor(100, 100, 100);
             $pdf->Cell(0, 10, date("d/m/Y H:i"), 0, 0, 'C');
 
-            // Sortie
+
             header('Content-Type: application/pdf');
             header('Content-Disposition: inline; filename="pret.pdf"');
             $pdf->Output('I', 'pret.pdf');
             exit;
-
         } catch (Exception $e) {
             http_response_code(400);
             header('Content-Type: application/json');
