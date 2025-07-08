@@ -1,42 +1,12 @@
-            
-            SELECT t.id_taux_pret, t.taux
-            FROM ef_pret_db_taux_pret t
-            JOIN ef_pret_db_type_pret tp ON tp.id_type_pret = t.id_type_pret
-            WHERE tp.id_type_pret = 1
-            AND 12 BETWEEN t.min_mois AND t.max_mois
-            LIMIT 1;
+<?php
+require_once __DIR__ . '/../db.php';
 
-            SELECT 
-                YEAR(r.date_paiement) AS annee,
-                MONTH(r.date_paiement) AS mois,
-                ROUND(SUM(p.montant * (t.taux/100/12)), 2) AS interets_mensuels
-            FROM 
-                ef_pret_db_pret p
-            JOIN 
-                ef_pret_db_taux_pret t ON p.id_taux_pret = t.id_taux_pret
-            JOIN 
-                ef_pret_db_remboursement r ON p.id_pret = r.id_pret
-            GROUP BY 
-                YEAR(r.date_paiement), MONTH(r.date_paiement)
-            ORDER BY 
-                annee, mois
-            ;
+class Montant {
+    public static function getStatsParMois($start = null, $end = null) {
+        $db = getDB();
 
-
-
-SELECT 
-    r.mois,
-    r.annee,
-    SUM(p.montant * (tp.taux / 100)) AS interet_total
-FROM ef_pret_db_remboursement r
-JOIN ef_pret_db_pret p ON r.id_pret = p.id_pret
-JOIN ef_pret_db_taux_pret tp ON p.id_taux_pret = tp.id_taux_pret
-WHERE 1
-GROUP BY r.annee, r.mois
-ORDER BY r.annee, r.mois;
-
-
-SELECT
+        $sql = "
+            SELECT
                 y.mois,
                 y.annee,
                 IFNULL(f.montant_verse, 0) AS montant_verse,
@@ -69,4 +39,35 @@ SELECT
                 JOIN ef_pret_db_taux_pret tp ON tp.id_taux_pret = p.id_taux_pret
                 GROUP BY r.annee, r.mois
             ) r ON r.mois = y.mois AND r.annee = y.annee
-            WHERE 1;
+            WHERE 1
+        ";
+
+        $params = [];
+
+        if ($start && $end) {
+            $sql .= " AND STR_TO_DATE(CONCAT(y.annee, '-', LPAD(y.mois, 2, '0'), '-01'), '%Y-%m-%d') BETWEEN :start AND :end";
+            $params['start'] = $start;
+            $params['end'] = $end;
+        }
+
+        $sql .= " ORDER BY y.annee, y.mois";
+
+        $stmt = $db->prepare($sql);
+        $stmt->execute($params);
+        $results = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+        // Calcul du reste disponible (cumulatif)
+        $cumule_verse = 0;
+        $cumule_emprunte = 0;
+        $cumule_rembourse = 0;
+
+        foreach ($results as &$row) {
+            $cumule_verse += $row['montant_verse'];
+            $cumule_emprunte += $row['montant_emprunte'];
+            $cumule_rembourse += $row['montant_rembourse'];
+            $row['reste_disponible'] = $cumule_verse - $cumule_emprunte + $cumule_rembourse;
+        }
+
+        return $results;
+    }
+}

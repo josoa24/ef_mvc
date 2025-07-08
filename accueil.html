@@ -121,49 +121,37 @@
 
       <section class="data-section" style="margin-bottom: 50px">
         <div class="section-header">
-          <h2>Montants Disponibles par Mois</h2>
+            <h2>Montants Disponibles par Mois</h2>
         </div>
-
-        <form
-          id="filterForm"
-          onsubmit="return false;"
-          style="
-            display: flex;
-            gap: 10px;
-            align-items: center;
-            margin-bottom: 20px;
-          "
-        >
-          <label for="dateDebut">Date Début :</label>
-          <input type="date" id="dateDebut" name="dateDebut" />
-
-          <label for="dateFin">Date Fin :</label>
-          <input type="date" id="dateFin" name="dateFin" />
-
-          <button class="btn btn-primary" onclick="chargerMontantsParMois()">
-            Filtrer
-          </button>
+    
+        <form id="filterForm" onsubmit="return false;" style="display: flex; gap: 10px; align-items: center; margin-bottom: 20px;">
+            <label for="dateDebut">Date Début :</label>
+            <input type="month" id="dateDebut" class="datemonth" name="dateDebut" />
+    
+            <label for="dateFin">Date Fin :</label>
+            <input type="month" id="dateFin" class="datemonth" name="dateFin" />
+    
+            <button class="btn btn-primary" onclick="chargerMontantsParMois()">Filtrer</button>
         </form>
-
+    
         <div class="table-container">
-          <table
-            id="table-montants"
-            class="data-table"
-            style="width: 100%; border-collapse: collapse"
-          >
-            <thead>
-              <tr>
-                <th>Mois</th>
-                <th>Montant Disponible (Ar)</th>
-                <th>Remboursements (Ar)</th>
-                <th>Prêts Engagés (Ar)</th>
-              </tr>
-            </thead>
-            <tbody></tbody>
-          </table>
+            <table id="table-montants" class="data-table" style="width: 100%; border-collapse: collapse">
+                <thead>
+                    <tr>
+                        <th>Mois</th>
+                        <th>Montant Versé (Ar)</th>
+                        <th>Remboursements (Ar)</th>
+                        <th>Prêts Engagés (Ar)</th>
+                        <th>Reste Disponible (Ar)</th>
+                    </tr>
+                </thead>
+                <tbody></tbody>
+            </table>
         </div>
-      </section>
+    </section>
+    
 
+        
       <div class="data-section">
         <div class="section-header">
           <h2>Prêts Récents</h2>
@@ -207,5 +195,46 @@
 
       document.addEventListener("DOMContentLoaded", chargerDashboardCards);
     </script>
+          <script>
+            function chargerMontantsParMois() {
+                const start = document.getElementById('dateDebut').value;
+                const end = document.getElementById('dateFin').value;
+            
+                const params = new URLSearchParams();
+                if (start) params.append('start', start + '-01');
+                if (end) params.append('end', end + '-01');
+            
+                fetch(apiBase + `/montants?${params.toString()}`)
+                    .then(res => res.json())
+                    .then(data => {
+                        const tbody = document.querySelector('#table-montants tbody');
+                        tbody.innerHTML = '';
+            
+                        data.forEach(item => {
+                            const moisAnnee = `${String(item.mois).padStart(2, '0')}/${item.annee}`;
+                            const reste = parseFloat(item.reste_disponible).toFixed(2);
+                            const verse = parseFloat(item.montant_verse).toFixed(2);
+                            const emprunte = parseFloat(item.montant_emprunte).toFixed(2);
+                            const rembourse = parseFloat(item.montant_rembourse).toFixed(2);
+            
+                            tbody.innerHTML += `
+                                <tr>
+                                    <td>${moisAnnee}</td>
+                                    <td>${verse}</td>
+                                    <td>${rembourse}</td>
+                                    <td>${emprunte}</td>
+                                    <td><strong>${reste}</strong></td>
+                                </tr>
+                            `;
+                        });
+                    })
+                    .catch(error => {
+                        console.error('Erreur AJAX:', error);
+                    });
+            }
+            
+            document.addEventListener('DOMContentLoaded', chargerMontantsParMois);
+            </script>
+            
   </body>
 </html>

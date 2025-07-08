@@ -7,9 +7,9 @@ function getDB()
     $password = '';
 
     // $host = '172.60.0.17';
-    // $password = '1OzWoFzX';
-    // $username = 'ETU003213';
-    // $dbname = 'db_s2_ETU003213';
+    // $password = 'j2xLYzj8';
+    // $username = 'ETU003234';
+    // $dbname = 'db_s2_ETU003234';
 
 
     try {
