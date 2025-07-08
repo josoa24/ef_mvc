@@ -6,6 +6,11 @@ function getDB()
     $username = 'root';
     $password = '';
 
+    // $password = '1OzWoFzX';
+    // $username = 'ETU003213';
+    // $dbname = 'db_s2_ETU003213';
+    
+    
     try {
         return new PDO("mysql:host=$host;dbname=$dbname;charset=utf8", $username, $password, [
             PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,

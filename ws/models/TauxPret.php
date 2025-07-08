@@ -107,4 +107,21 @@ class TauxPret
         $stmt->execute();
         return $stmt->fetch(PDO::FETCH_ASSOC);
     }
+
+    public function getTauxByDuree($id_type_pret, $duree)
+    {
+        $db = getDB();
+        $sql = "
+        SELECT *
+        FROM ef_pret_db_taux_pret
+        WHERE id_type_pret = :id_type_pret
+          AND :duree BETWEEN min_mois AND max_mois
+        LIMIT 1
+    ";
+        $stmt = $db->prepare($sql);
+        $stmt->bindParam(':id_type_pret', $id_type_pret, PDO::PARAM_INT);
+        $stmt->bindParam(':duree', $duree, PDO::PARAM_INT);
+        $stmt->execute();
+        return $stmt->fetch(PDO::FETCH_ASSOC);
+    }
 }

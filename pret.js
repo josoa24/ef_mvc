@@ -123,9 +123,66 @@ function envoyerPret(nombreRemboursements, montant, id_client, id_type_pret) {
     .catch((err) => console.error("Erreur PDF :", err));
 }
 
+function setupTauxAuto() {
+  const dureeInput = document.getElementById("duree_mois");
+  const tauxSelect = document.getElementById("id_taux_pret");
+  const montantInput = document.getElementById("montant");
+  const infoDiv = document.getElementById("info_calcul");
+
+  async function fetchTaux() {
+    const duree = parseInt(dureeInput.value, 10);
+    const idTypePret = tauxSelect.value;
+    const montant = parseFloat(montantInput.value);
+
+    if (!idTypePret || !duree || duree <= 0 || !montant || montant <= 0) {
+      infoDiv.textContent = "";
+      return;
+    }
+
+    try {
+      const response = await fetch(
+        apiBase + `/taux_pret/duree/${idTypePret}/${duree}`
+      );
+      if (!response.ok)
+        throw new Error("Erreur lors de la récupération du taux");
+      const data = await response.json();
+
+      if (data) {
+        const tauxAnnuel = data.taux;
+        const interetsAnnuel = (montant * tauxAnnuel) / 100;
+        const interetsTotal = interetsAnnuel * (duree / 12);
+        const montantTotal = montant + interetsTotal;
+        const paiementMensuel = montantTotal / duree;
+
+        infoDiv.innerHTML = `
+          Taux annuel applicable : <strong>${tauxAnnuel}%</strong> (durée entre ${
+          data.min_mois
+        } et ${data.max_mois} mois)<br>
+          Montant total à rembourser : <strong>${montantTotal.toFixed(
+            2
+          )} Ar</strong><br>
+          Paiement mensuel estimé : <strong>${paiementMensuel.toFixed(
+            2
+          )} Ar</strong>
+        `;
+      } else {
+        infoDiv.textContent = "Aucun taux trouvé pour cette durée.";
+      }
+    } catch (error) {
+      infoDiv.textContent = "Erreur serveur, impossible de récupérer le taux.";
+      console.error(error);
+    }
+  }
+
+  dureeInput.addEventListener("input", fetchTaux);
+  tauxSelect.addEventListener("change", fetchTaux);
+  montantInput.addEventListener("input", fetchTaux);
+}
+
 window.onload = () => {
   chargerClients();
   chargerTaux();
   chargerStatuts();
   chargerPrets();
+  setupTauxAuto();
 };
