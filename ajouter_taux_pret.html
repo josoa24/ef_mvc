@@ -81,53 +81,38 @@
       </div>
       <nav class="sidebar-nav">
         <ul>
-          <li class="nav-item active">
+          <li class="nav-item ">
             <a href="accueil.html" class="nav-link">
               <i class="fas fa-tachometer-alt"></i>
               <span>Tableau de Bord</span>
             </a>
           </li>
-          <li class="nav-item">
-            <a href="ajouter_taux_pret.html" class="nav-link">
-              <i class="fas fa-percentage"></i>
-              <span> Configurer Taux </span>
-            </a>
+          <li class="nav-item active">
+            <a href="ajouter_taux_pret.html" class="nav-link"
+              ><i class="fas fa-percentage"></i><span>Configurer Taux</span></a
+            >
           </li>
           <li class="nav-item">
-            <a href="clients.html" class="nav-link">
+            <a href="formulaire_remboursement.html" class="nav-link">
               <i class="fas fa-users"></i>
-              <span>Clients</span>
+              <span>Remboursements</span>
             </a>
           </li>
           <li class="nav-item">
-            <a href="prets.html" class="nav-link">
-              <i class="fas fa-money-check-alt"></i>
-              <span>Prêts</span>
-            </a>
+            <a href="prets.html" class="nav-link"
+              ><i class="fas fa-money-check-alt"></i><span>Prêts</span></a
+            >
           </li>
           <li class="nav-item">
-            <a href="fonds.html" class="nav-link">
-              <i class="fas fa-piggy-bank"></i>
-              <span>Fonds</span>
-            </a>
+            <a href="ajout_fonds.html" class="nav-link"
+              ><i class="fas fa-piggy-bank"></i><span>Depot client</span></a
+            >
           </li>
+
           <li class="nav-item">
-            <a href="taux.htm" class="nav-link">
-              <i class="fas fa-percentage"></i>
-              <span>Taux de Prêt</span>
-            </a>
-          </li>
-          <li class="nav-item">
-            <a href="interets_graphique.html" class="nav-link">
-              <i class="fas fa-chart-line"></i>
-              <span>Interets Gagnés</span>
-            </a>
-          </li>
-          <li class="nav-item">
-            <a href="parametres.html" class="nav-link">
-              <i class="fas fa-cog"></i>
-              <span>Paramètres</span>
-            </a>
+            <a href="interets_graphique.html" class="nav-link"
+              ><i class="fas fa-chart-line"></i><span>Interets Gagnés</span></a
+            >
           </li>
         </ul>
       </nav>
@@ -137,7 +122,9 @@
       <div class="content-wrapper">
         <div class="page-header">
           <h1><i class="fas fa-percent"></i> Gestion des Taux de Prêt</h1>
-          <p class="subtitle">Configurez et gérez les taux d'intérêt selon les durées de prêt</p>
+          <p class="subtitle">
+            Configurez et gérez les taux d'intérêt selon les durées de prêt
+          </p>
         </div>
 
         <div class="form-section">
@@ -146,7 +133,12 @@
               <label for="type_pret">
                 <i class="fas fa-tag"></i> Type de prêt
               </label>
-              <input type="text" id="type_pret" placeholder="Type de prêt" required />
+              <input
+                type="text"
+                id="type_pret"
+                placeholder="Type de prêt"
+                required
+              />
             </div>
           </div>
           <div class="form-grid">
@@ -154,29 +146,53 @@
               <label for="inf_mois">
                 <i class="fas fa-calendar-alt"></i> Durée minimale
               </label>
-              <input type="number" id="inf_mois" placeholder="Inf. à (mois)" required />
+              <input
+                type="number"
+                id="inf_mois"
+                placeholder="Inf. à (mois)"
+                required
+              />
             </div>
             <div class="form-group">
               <label for="inf_taux">
                 <i class="fas fa-percentage"></i> Taux minimum
               </label>
-              <input type="number" step="0.01" id="inf_taux" placeholder="Taux %" required />
+              <input
+                type="number"
+                step="0.01"
+                id="inf_taux"
+                placeholder="Taux %"
+                required
+              />
             </div>
-
           </div>
           <!-- Section des intervalles -->
           <div class="intervals-section">
             <div class="intervals-header">
-              <h3>
-                <i class="fas fa-layer-group"></i> Intervalles de Taux
-              </h3>
+              <h3><i class="fas fa-layer-group"></i> Intervalles de Taux</h3>
             </div>
-            
+
             <div id="intervals_container">
               <div class="interval-group">
-                <input type="number" placeholder="Min (mois)" class="min" required />
-                <input type="number" placeholder="Max (mois)" class="max" required />
-                <input type="number" step="0.01" placeholder="Taux (%)" class="taux" required />
+                <input
+                  type="number"
+                  placeholder="Min (mois)"
+                  class="min"
+                  required
+                />
+                <input
+                  type="number"
+                  placeholder="Max (mois)"
+                  class="max"
+                  required
+                />
+                <input
+                  type="number"
+                  step="0.01"
+                  placeholder="Taux (%)"
+                  class="taux"
+                  required
+                />
               </div>
             </div>
           </div>
@@ -185,13 +201,24 @@
               <label for="sup_mois">
                 <i class="fas fa-calendar-check"></i> Durée maximale
               </label>
-              <input type="number" id="sup_mois" placeholder="Sup. à (mois)" required />
+              <input
+                type="number"
+                id="sup_mois"
+                placeholder="Sup. à (mois)"
+                required
+              />
             </div>
             <div class="form-group">
               <label for="sup_taux">
                 <i class="fas fa-chart-line"></i> Taux maximum
               </label>
-              <input type="number" step="0.01" id="sup_taux" placeholder="Taux %" required />
+              <input
+                type="number"
+                step="0.01"
+                id="sup_taux"
+                placeholder="Taux %"
+                required
+              />
             </div>
           </div>
           <!-- Boutons d'action -->
@@ -283,24 +310,25 @@
       }
 
       function chargerTaux() {
-    fetch(apiBase + "/taux_pret")
-      .then((res) => res.json())
-      .then((data) => {
-        const container = document.getElementById("liste-taux");
-        container.innerHTML = '<h3><i class="fas fa-list"></i> Taux Configurés</h3>';
+        fetch(apiBase + "/taux_pret")
+          .then((res) => res.json())
+          .then((data) => {
+            const container = document.getElementById("liste-taux");
+            container.innerHTML =
+              '<h3><i class="fas fa-list"></i> Taux Configurés</h3>';
 
-        data.forEach((row) => {
-          const div = document.createElement("div");
-          div.className = "taux-card";
-          div.style.border = "1px solid var(--border-color)";
-          div.style.padding = "20px";
-          div.style.margin = "15px 0";
-          div.style.borderRadius = "12px";
-          div.style.backgroundColor = "white";
-          div.style.boxShadow = "0 2px 10px var(--shadow-color)";
-          div.style.transition = "all 0.3s ease";
+            data.forEach((row) => {
+              const div = document.createElement("div");
+              div.className = "taux-card";
+              div.style.border = "1px solid var(--border-color)";
+              div.style.padding = "20px";
+              div.style.margin = "15px 0";
+              div.style.borderRadius = "12px";
+              div.style.backgroundColor = "white";
+              div.style.boxShadow = "0 2px 10px var(--shadow-color)";
+              div.style.transition = "all 0.3s ease";
 
-          let html = `
+              let html = `
             <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 15px;">
               <i class="fas fa-percent" style="color: var(--primary-color); font-size: 1.2rem;"></i>
               <h3 style="color: var(--primary-color); margin: 0; font-size: 1.3rem;">${row.type}</h3>
@@ -312,42 +340,42 @@
                 <p style="font-size: 1.5rem; color: var(--accent-color); font-weight: 700;">${row.inf_taux}%</p>
               </div>`;
 
-          if (row.intervalles.length > 0) {
-            html += `
+              if (row.intervalles.length > 0) {
+                html += `
               <div class="taux-item" style="background: var(--light-color); padding: 15px; border-radius: 8px;">
                 <p style="font-weight: 600; color: var(--dark-color); margin-bottom: 5px;">Intervalles</p>
                 <div style="max-height: 120px; overflow-y: auto;">`;
-            
-            row.intervalles.forEach((interval) => {
-              html += `<p style="margin: 8px 0; color: var(--dark-color);">${interval}</p>`;
-            });
-            
-            html += `</div></div>`;
-          }
 
-          html += `
+                row.intervalles.forEach((interval) => {
+                  html += `<p style="margin: 8px 0; color: var(--dark-color);">${interval}</p>`;
+                });
+
+                html += `</div></div>`;
+              }
+
+              html += `
               <div class="taux-item" style="background: var(--light-color); padding: 15px; border-radius: 8px;">
                 <p style="font-weight: 600; color: var(--dark-color); margin-bottom: 5px;">> ${row.sup_mois} mois</p>
                 <p style="font-size: 1.5rem; color: var(--accent-color); font-weight: 700;">${row.sup_taux}%</p>
               </div>
             </div>`;
 
-          div.innerHTML = html;
-          container.appendChild(div);
-          
-          // Effet de survol
-          div.addEventListener('mouseenter', () => {
-            div.style.transform = 'translateY(-5px)';
-            div.style.boxShadow = '0 5px 15px rgba(0, 0, 0, 0.1)';
+              div.innerHTML = html;
+              container.appendChild(div);
+
+              // Effet de survol
+              div.addEventListener("mouseenter", () => {
+                div.style.transform = "translateY(-5px)";
+                div.style.boxShadow = "0 5px 15px rgba(0, 0, 0, 0.1)";
+              });
+
+              div.addEventListener("mouseleave", () => {
+                div.style.transform = "none";
+                div.style.boxShadow = "0 2px 10px var(--shadow-color)";
+              });
+            });
           });
-          
-          div.addEventListener('mouseleave', () => {
-            div.style.transform = 'none';
-            div.style.boxShadow = '0 2px 10px var(--shadow-color)';
-          });
-        });
-      });
-}
+      }
       chargerTaux();
     </script>
   </body>

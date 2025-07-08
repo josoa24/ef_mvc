@@ -4,7 +4,7 @@ function getDB()
     $host = 'localhost';
     $dbname = 'ef_pret_db';
     $username = 'root';
-    $password = 'ETU003234M.';
+    $password = '';
 
     // $host = '172.60.0.17';
     // $password = '1OzWoFzX';
