@@ -184,64 +184,79 @@
     </main>
 
     <script src="url.js" defer></script>
-    <script src="ajax.js" defer></script>
     <script src="rapport.js" defer></script>
     <script>
-      function chargerDashboardCards() {
-        ajax("GET", "/increase", null, (clientData) => {
-          const totalClients = clientData.total_clients || 0;
-          const variationClients = clientData.increase_percentage || 0;
-          document.querySelector(".card-value.clients").innerText =
-            totalClients;
-          document.querySelector(".card-trend.clients").innerHTML = `
-        <i class="fas fa-arrow-${variationClients >= 0 ? "up" : "down"}"></i>
-        ${variationClients >= 0 ? "+" : ""}${variationClients}% ce mois
-      `;
-        });
-      }
-
-      document.addEventListener("DOMContentLoaded", chargerDashboardCards);
-    </script>
-          <script>
-            function chargerMontantsParMois() {
-                const start = document.getElementById('dateDebut').value;
-                const end = document.getElementById('dateFin').value;
-            
-                const params = new URLSearchParams();
-                if (start) params.append('start', start + '-01');
-                if (end) params.append('end', end + '-01');
-            
-                fetch(apiBase + `/montants?${params.toString()}`)
-                    .then(res => res.json())
-                    .then(data => {
-                        const tbody = document.querySelector('#table-montants tbody');
-                        tbody.innerHTML = '';
-            
-                        data.forEach(item => {
-                            const moisAnnee = `${String(item.mois).padStart(2, '0')}/${item.annee}`;
-                            const reste = parseFloat(item.reste_disponible).toFixed(2);
-                            const verse = parseFloat(item.montant_verse).toFixed(2);
-                            const emprunte = parseFloat(item.montant_emprunte).toFixed(2);
-                            const rembourse = parseFloat(item.montant_rembourse).toFixed(2);
-            
-                            tbody.innerHTML += `
-                                <tr>
-                                    <td>${moisAnnee}</td>
-                                    <td>${verse}</td>
-                                    <td>${rembourse}</td>
-                                    <td>${emprunte}</td>
-                                    <td><strong>${reste}</strong></td>
-                                </tr>
-                            `;
-                        });
-                    })
-                    .catch(error => {
-                        console.error('Erreur AJAX:', error);
-                    });
+      function ajax(method, url, data, callback, errorCallback = null) {
+        const xhr = new XMLHttpRequest();
+        xhr.open(method, apiBase + url, true);
+        xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+        xhr.onreadystatechange = () => {
+          if (xhr.readyState === 4) {
+            if (xhr.status === 200) {
+              try {
+                const json = JSON.parse(xhr.responseText);
+                callback(json);
+              } catch (err) {
+                console.error("Erreur de parsing JSON :", err);
+                console.error("Réponse serveur :", xhr.responseText);
+                if (errorCallback) errorCallback(err, xhr.responseText);
+              }
+            } else {
+              console.error("Erreur AJAX :", xhr.status, xhr.statusText);
+              if (errorCallback) errorCallback(xhr.statusText, xhr.responseText);
             }
-            
-            document.addEventListener('DOMContentLoaded', chargerMontantsParMois);
-            </script>
-            
+          }
+        };
+        xhr.send(data);
+      }
+    
+      function chargerMontantsParMois() {
+        const start = document.getElementById('dateDebut').value;
+        const end = document.getElementById('dateFin').value;
+    
+        const params = new URLSearchParams();
+        if (start) params.append('start', start + '-01');
+        if (end) params.append('end', end + '-01');
+    
+        fetch(apiBase + `/montants?${params.toString()}`)
+          .then(res => res.text())
+          .then(responseText => {
+            try {
+              const data = JSON.parse(responseText);
+              const tbody = document.querySelector('#table-montants tbody');
+              tbody.innerHTML = '';
+    
+              data.forEach(item => {
+                const moisAnnee = `${String(item.mois).padStart(2, '0')}/${item.annee}`;
+                const reste = parseFloat(item.reste_disponible).toFixed(2);
+                const verse = parseFloat(item.montant_verse).toFixed(2);
+                const emprunte = parseFloat(item.montant_emprunte).toFixed(2);
+                const rembourse = parseFloat(item.montant_rembourse).toFixed(2);
+    
+                tbody.innerHTML += `
+                  <tr>
+                    <td>${moisAnnee}</td>
+                    <td>${verse}</td>
+                    <td>${rembourse}</td>
+                    <td>${emprunte}</td>
+                    <td><strong>${reste}</strong></td>
+                  </tr>
+                `;
+              });
+            } catch (error) {
+              console.error("Erreur JSON:", error);
+              console.error("Réponse brute:", responseText);
+              alert("Une erreur s'est produite côté serveur. Vérifie la console.");
+            }
+          })
+          .catch(err => {
+            console.error("Erreur AJAX:", err);
+            alert("Erreur réseau ou serveur !");
+          });
+      }
+    
+      document.addEventListener("DOMContentLoaded", chargerMontantsParMois);
+    </script>
+                
   </body>
 </html>
