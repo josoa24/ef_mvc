@@ -1,45 +1,128 @@
-
-
+<?php
+include "url.php";
+?>
 <!DOCTYPE html>
 <html lang="fr">
 
 <head>
   <meta charset="UTF-8" />
-  <title>Gestion des étudiants</title>
-  <script src="url.js" defer></script>
-  <style>
-    body {
-      font-family: sans-serif;
-      padding: 20px;
-    }
-
-    input,
-    button {
-      margin: 5px;
-      padding: 5px;
-    }
-
-    table {
-      border-collapse: collapse;
-      width: 100%;
-      margin-top: 20px;
-    }
-
-    th,
-    td {
-      border: 1px solid #ccc;
-      padding: 8px;
-      text-align: left;
-    }
-
-    th {
-      background-color: #f2f2f2;
-    }
-  </style>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Connexion - EF Gestion Prêts</title>
+  <script src="url.js"></script>
+  <link
+    rel="stylesheet"
+    href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" />
+  <link
+    rel="stylesheet"
+    href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" />
+  <link rel="stylesheet" href="assets/css/login.css" />
 </head>
 
 <body>
-  <a href="http://172.60.0.17/ETU003213/t/exam_s4/accueil.html">GO TO DASHBOARD</a>
+  <div class="auth-container">
+    <div class="auth-illustration">
+      <div class="illustration-content">
+        <h2>Portail Administrateur Sécurisé</h2>
+        <p>
+          Accédez au système de gestion des prêts bancaires de votre
+          établissement
+        </p>
+        <div class="security-badge">
+          <i class="fas fa-shield-alt"></i>
+          <span>Certifié PCI DSS Niveau 1</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="auth-form-container">
+      <div class="auth-form-wrapper">
+        <div class="form-header">
+          <img
+            src="assets/images/logo-banque.jpg"
+            alt="Logo Banque"
+            class="form-logo" />
+          <h1>Connexion</h1>
+          <p>Veuillez entrer vos identifiants administrateur</p>
+        </div>
+
+        <form
+          action="<?= $url ?>"
+          method="get"
+          id="loginForm"
+          class="auth-form">
+          <div class="input-group">
+            <label for="username">Identifiant Administrateur</label>
+            <div class="input-field">
+              <i class="fas fa-user-tie"></i>
+              <input
+                type="text"
+                id="username"
+                name="username"
+                placeholder="ex : admin123"
+                autocomplete="username"
+                value="admin123"
+                required />
+            </div>
+          </div>
+
+          <div class="input-group">
+            <label for="password">Mot de passe</label>
+            <div class="input-field">
+              <i class="fas fa-lock"></i>
+              <input
+                type="password"
+                id="password"
+                name="password"
+                placeholder="Votre mot de passe"
+                autocomplete="current-password"
+                value="123"
+                required />
+              <button
+                type="button"
+                id="togglePassword"
+                class="password-toggle">
+                <i class="fas fa-eye"></i>
+              </button>
+            </div>
+          </div>
+
+          <div class="form-options">
+            <label class="custom-checkbox">
+              <input type="checkbox" name="remember" />
+              <span class="checkmark"></span>
+              Se souvenir de moi
+            </label>
+            <a href="#" class="text-link">Mot de passe oublié ?</a>
+          </div>
+
+          <button type="submit" class="primary-btn">
+            <span class="btn-content">
+              <span>Se connecter</span>
+              <i class="fas fa-arrow-right"></i>
+            </span>
+          </button>
+
+          <div class="form-footer">
+            <p>
+              Nouveau sur la plateforme ?
+              <a href="#" class="text-link">Contactez le support</a>
+            </p>
+          </div>
+        </form>
+      </div>
+
+      <div class="auth-footer">
+        <p>© 2025 EF Gestion Prêts. Tous droits réservés.</p>
+        <div class="footer-links">
+          <a href="#">Confidentialité</a>
+          <a href="#">Conditions</a>
+          <a href="#">Assistance</a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="assets/js/login.js"></script>
 </body>
 
 </html>

@@ -1,15 +1,15 @@
 <?php
 function getDB()
 {
-    $host = 'localhost';
-    $dbname = 'ef_pret_db';
-    $username = 'root';
-    $password = '';
+    // $host = 'localhost';
+    // $dbname = 'ef_pret_db';
+    // $username = 'root';
+    // $password = '';
 
-    // $host = '172.60.0.17';
-    // $password = '1OzWoFzX';
-    // $username = 'ETU003213';
-    // $dbname = 'db_s2_ETU003213';
+    $host = '172.60.0.17';
+    $password = '1OzWoFzX';
+    $username = 'ETU003213';
+    $dbname = 'db_s2_ETU003213';
 
 
     try {
