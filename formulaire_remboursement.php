@@ -1,41 +1,37 @@
-<?php
-ini_set('display_errors', 1);
-ini_set('display_startup_errors', 1);
-error_reporting(E_ALL);
-// formulaire_remboursement.php
-require_once __DIR__ . '/ws/models/Remboursement.php';
-require_once __DIR__ . '/ws/models/Pret.php';
-
-// Récupérer tous les prêts avec infos clients pour la liste déroulante
-$prets = Pret::getAllWithClient();
-
-?>
-
 <!DOCTYPE html>
 <html lang="fr">
 <head>
-    <meta charset="UTF-8">
-    <title>Formulaire de Remboursement</title>
+  <meta charset="UTF-8">
+  <title>Ajout de remboursement</title>
+  <script src="assets/js/remboursement.js" defer></script>
+  <style>
+    body { font-family: sans-serif; padding: 20px; }
+    input, select, button { margin: 5px; padding: 5px; }
+    table { border-collapse: collapse; width: 100%; margin-top: 20px; }
+    th, td { border: 1px solid #ccc; padding: 8px; text-align: left; }
+    th { background-color: #f2f2f2; }
+  </style>
 </head>
 <body>
-    <h1>Ajouter un remboursement</h1>
-    <form method="POST" action="remboursements">
-        <label for="pret_id">Prêt (client):</label>
-        <select name="pret_id" id="pret_id" required>
-            <option value="">-- Sélectionnez un prêt --</option>
-            <?php foreach ($prets as $pret): ?>
-                <option value="<?= htmlspecialchars($pret['id_pret']) ?>">
-                    <?= htmlspecialchars($pret['nom_client']) ?> - Montant: <?= htmlspecialchars($pret['montant']) ?> Ar
-                </option>
-            <?php endforeach; ?>
-        </select>
-        <br><br>
 
-        <label for="date_paiement">Date de paiement :</label>
-        <input type="date" id="date_paiement" name="date_paiement" required>
-        <br><br>
+  <h1>Ajout de remboursement</h1>
 
-        <button type="submit">Valider le remboursement</button>
-    </form>
+  <div>
+    <select id="pret_id"></select>
+    <input type="date" id="date_paiement" />
+    <button onclick="ajouterRemboursement()">Valider</button>
+  </div>
+
+  <table id="table-remboursements">
+    <thead>
+      <tr>
+        <th>Prêt</th>
+        <th>Date Paiement</th>
+        <th>Montant attendu</th>
+      </tr>
+    </thead>
+    <tbody></tbody>
+  </table>
+
 </body>
 </html>

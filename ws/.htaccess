@@ -1,3 +1,7 @@
 RewriteEngine On
+RewriteBase /Projets/Final_Exam_S4/ef_mvc/
+
 RewriteCond %{REQUEST_FILENAME} !-f
-RewriteRule ^ index.php [QSA,L]
+RewriteCond %{REQUEST_FILENAME} !-d
+
+RewriteRule ^(.*)$ index.php [QSA,L]
