@@ -1,0 +1,291 @@
+/* Variables et base */
+:root {
+    --primary-color: #1e3a8a;
+    --secondary-color: #3b82f6;
+    --accent-color: #10b981;
+    --success-color: #059669;
+    --warning-color: #f59e0b;
+    --danger-color: #dc2626;
+    --dark-color: #1f2937;
+    --light-color: #f8fafc;
+    --border-color: #e5e7eb;
+    --shadow-color: rgba(0, 0, 0, 0.1);
+    --sidebar-width: 260px;
+    --navbar-height: 70px;
+}
+
+/* Structure principale */
+.wrapperContainer {
+    padding-left: var(--sidebar-width);
+    padding-top: var(--navbar-height);
+    min-height: 100vh;
+    background-color: #f5f7fa;
+}
+
+.content-wrapper {
+    padding: 2rem;
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+/* En-tête */
+.remboursement-header {
+    margin-bottom: 2rem;
+    padding-bottom: 1rem;
+    border-bottom: 1px solid var(--border-color);
+}
+
+.remboursement-header h1 {
+    color: var(--primary-color);
+    font-size: 1.8rem;
+    font-weight: 700;
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    margin-bottom: 0.5rem;
+}
+
+.remboursement-header .subtitle {
+    color: var(--dark-color);
+    opacity: 0.8;
+    font-size: 0.95rem;
+    margin-left: 1.5rem;
+}
+
+/* Carte principale */
+.remboursement-card {
+    display: grid;
+    grid-template-columns: 1fr 300px;
+    gap: 2rem;
+    background: white;
+    border-radius: 12px;
+    box-shadow: 0 6px 18px rgba(0, 0, 0, 0.05);
+    overflow: hidden;
+}
+
+/* Formulaire */
+.remboursement-form {
+    padding: 2rem;
+}
+
+.form-group {
+    margin-bottom: 1.5rem;
+}
+
+.dual-inputs {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1.5rem;
+}
+
+.input-group {
+    position: relative;
+    margin-bottom: 1rem;
+}
+
+.input-group label {
+    display: block;
+    margin-bottom: 0.5rem;
+    font-size: 0.9rem;
+    font-weight: 600;
+    color: var(--dark-color);
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.input-group label i {
+    color: var(--secondary-color);
+    font-size: 0.9rem;
+}
+
+.select-wrapper, .number-input {
+    position: relative;
+}
+
+.select-wrapper i {
+    position: absolute;
+    right: 1rem;
+    top: 50%;
+    transform: translateY(-50%);
+    pointer-events: none;
+    color: var(--dark-color);
+    opacity: 0.7;
+}
+
+select, input[type="date"], input[type="number"] {
+    width: 100%;
+    padding: 0.85rem 1rem;
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
+    font-family: 'Poppins', sans-serif;
+    font-size: 0.95rem;
+    transition: all 0.2s ease;
+    background-color: white;
+}
+
+select {
+    appearance: none;
+    cursor: pointer;
+}
+
+input[type="number"] {
+    padding-right: 0.5rem;
+}
+
+/* Validation des champs */
+input:invalid, select:invalid {
+    border-color: var(--warning-color);
+}
+
+input:focus:invalid, select:focus:invalid {
+    box-shadow: 0 0 0 3px rgba(245, 158, 11, 0.2);
+}
+
+input:valid, select:valid {
+    border-color: var(--border-color);
+}
+
+input:focus:valid, select:focus:valid {
+    border-color: var(--accent-color);
+    box-shadow: 0 0 0 3px rgba(16, 185, 129, 0.2);
+}
+
+/* Bouton */
+.form-actions {
+    margin-top: 2.5rem;
+}
+
+.submit-btn {
+    width: 100%;
+    padding: 1rem;
+    background: linear-gradient(135deg, var(--accent-color), var(--success-color));
+    color: white;
+    border: none;
+    border-radius: 8px;
+    font-size: 1rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.75rem;
+    box-shadow: 0 4px 6px rgba(16, 185, 129, 0.15);
+}
+
+.submit-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 12px rgba(16, 185, 129, 0.2);
+}
+
+.submit-btn:active {
+    transform: translateY(0);
+}
+
+/* Messages de statut */
+.status-message {
+    margin-top: 1.5rem;
+    padding: 1rem;
+    border-radius: 8px;
+    font-size: 0.9rem;
+    text-align: center;
+    display: none;
+    animation: fadeIn 0.3s ease-out;
+}
+
+.status-message.visible {
+    display: block;
+}
+
+.status-message.success {
+    background-color: rgba(5, 150, 105, 0.1);
+    color: var(--success-color);
+    border: 1px solid rgba(5, 150, 105, 0.2);
+}
+
+.status-message.error {
+    background-color: rgba(220, 38, 38, 0.1);
+    color: var(--danger-color);
+    border: 1px solid rgba(220, 38, 38, 0.2);
+}
+
+/* Panneau d'information */
+.remboursement-info {
+    background: rgba(59, 130, 246, 0.05);
+    padding: 2rem;
+    border-left: 1px solid var(--border-color);
+}
+
+.remboursement-info h3 {
+    color: var(--primary-color);
+    font-size: 1.1rem;
+    margin-bottom: 1rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.remboursement-info ul {
+    list-style: none;
+}
+
+.remboursement-info li {
+    margin-bottom: 0.75rem;
+    font-size: 0.9rem;
+    color: var(--dark-color);
+    opacity: 0.9;
+    position: relative;
+    padding-left: 1.5rem;
+}
+
+.remboursement-info li:before {
+    content: "•";
+    color: var(--accent-color);
+    position: absolute;
+    left: 0;
+    font-size: 1.2rem;
+}
+
+/* Animations */
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes shake {
+    0%, 100% { transform: translateX(0); }
+    20%, 60% { transform: translateX(-5px); }
+    40%, 80% { transform: translateX(5px); }
+}
+
+.error-shake {
+    animation: shake 0.4s ease-in-out;
+}
+
+/* Responsive */
+@media (max-width: 1024px) {
+    .remboursement-card {
+        grid-template-columns: 1fr;
+    }
+    
+    .remboursement-info {
+        border-left: none;
+        border-top: 1px solid var(--border-color);
+    }
+}
+
+@media (max-width: 768px) {
+    .dual-inputs {
+        grid-template-columns: 1fr;
+        gap: 1rem;
+    }
+    
+    .content-wrapper {
+        padding: 1.5rem;
+    }
+    
+    .remboursement-header h1 {
+        font-size: 1.5rem;
+    }
+}

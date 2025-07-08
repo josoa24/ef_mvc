@@ -1,74 +1,39 @@
 <?php
+
 require_once __DIR__ . '/../models/Remboursement.php';
-require_once __DIR__ . '/../helpers/Utils.php';
 
-class RemboursementController
-{
+class RemboursementController {
 
-    public static function getClientsAvecPret()
-    {
-        $clients = Remboursement::getClientsAvecPret();
-        Flight::json($clients);
-    }
-
-    public static function create()
-    {
-        $pret_id = $_POST['pret_id'] ?? null;
-        $date_input = $_POST['date_paiement'] ?? null;
-
-        if (!$pret_id || !$date_input) {
-            Flight::json(['error' => 'Champs manquants (pret_id, date_paiement)'], 400);
-            return;
-        }
-
-        $date_obj = DateTime::createFromFormat('Y-m-d', $date_input);
-        if (!$date_obj) {
-            Flight::json(['error' => 'Format de date invalide. Utilisez JJ/MM/AAAA'], 400);
-            return;
-        }
-        $date_paiement = $date_obj->format('Y-m-d');
-
-        require_once __DIR__ . '/../models/Pret.php';
-        $pret = Pret::getById($pret_id);
-        if (!$pret) {
-            Flight::json(['error' => 'Prêt non trouvé'], 404);
-            return;
-        }
-
-        require_once __DIR__ . '/../models/TauxPret.php';
-        $tauxInfo = TauxPret::getById($pret['taux_pret_id']);
-        if (!$tauxInfo) {
-            Flight::json(['error' => 'Taux de prêt introuvable'], 404);
-            return;
-        }
-
-        $montant = $pret['montant'];
-        $duree = $pret['duree_mois'];
-        $taux_annuel = $tauxInfo['taux'] / 100;
-
-        require_once __DIR__ . '/../helpers/Utils.php';
-        $annuite = Utils::calculerAnnuite($montant, $taux_annuel, $duree);
+    public static function ajouter() {
+        $data = Flight::request()->data;
 
         try {
-            $id = Remboursement::enregistrerRemboursement($pret_id, $date_paiement);
+            $model = new Remboursement();
+            $success = $model->insertRemboursement(
+                $data['id_pret'],
+                $data['date_paiement'],
+                intval($data['mois']),
+                intval($data['annee'])
+            );
+            
+            if ($success) {
+                Flight::json(["success" => true, "message" => "Remboursement ajouté avec succès."]);
+            } else {
+                Flight::json(["success" => false, "message" => "Échec de l'enregistrement du remboursement."]);
+            }
 
-            // Log pour débogage
-            error_log("Remboursement inséré - ID: $id, Pret: $pret_id, Date: $date_paiement");
+        } catch (Exception $e) {
+            Flight::json(["success" => false, "message" => $e->getMessage()]);
+        }
+    }
 
-            Flight::json([
-                'message' => 'Remboursement enregistré',
-                'id_remboursement' => $id,
-                'annuite_attendue' => $annuite,
-                'date_soumission' => $date_input, 
-                'date_enregistree' => $date_paiement // Montre le format enregistré
-            ]);
-        } catch (PDOException $e) {
-            error_log("Erreur d'insertion - Pret: $pret_id, Date: $date_paiement. Erreur: " . $e->getMessage());
-
-            Flight::json([
-                'error' => 'Erreur lors de l\'enregistrement',
-                'details' => $e->getMessage()
-            ], 500);
+    public static function getPrets() {
+        try {
+            $model = new Remboursement();
+            $prets = $model->getPretsEnCours();
+            Flight::json($prets);
+        } catch (Exception $e) {
+            Flight::json(["success" => false, "message" => $e->getMessage()]);
         }
     }
 }

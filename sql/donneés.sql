@@ -1,31 +1,43 @@
-USE ef_pret_db;
 
 INSERT INTO ef_pret_db_admin (user_name, identifiant_admin) VALUES
-  ('Super Admin', 'ADMIN-001');
+('Admin Principal', 'ADMIN-001');
 
 INSERT INTO ef_pret_db_etablissement_financier (nom_etablissement_financier, fonds_de_base) VALUES
-  ('Banque ABC', 1000000.00);
+('MicroFinance Mada', 100000000.00),
+('Banque Solidaire', 50000000.00);
 
 INSERT INTO ef_pret_db_client (nom_client, identifiant, email, telephone) VALUES
-  ('Jean', '123', 'jean@example.com', '+261341234567'),
-  ('Sarah', 'CLI-002', 'sarah@example.com', '+261349876543');
+('Rasolofoniaina Jean', 'CLI-001', 'jean.rasolo@example.com', '0321234567'),
+('Randriamampionona Sarah', 'CLI-002', 'sarah.rand@example.com', '0349876543'),
+('Rakoto Andry', 'CLI-003', 'andry.rakoto@example.com', '0337654321');
 
-INSERT INTO ef_pret_db_type_pret (nom_type_pret) VALUES
-  ('Prêt personnel'),
-  ('Prêt auto');
-
-INSERT INTO ef_pret_db_taux_pret (type_pret_id, taux, min_mois, max_mois) VALUES
-  (1, 10.00, 3, 12),
-  (2, 8.50, 12, 60);
+INSERT INTO ef_pret_db_ajout_fonds (id_etablissement_financier, id_client, montant) VALUES
+(1, 1, 150000.00),
+(1, 2, 200000.00),
+(2, 3, 100000.00);
 
 INSERT INTO ef_pret_db_statut_pret (libelle) VALUES
-  ('en cours'),
-  ('termine'),
-  ('annule');
+('en cours'),
+('remboursé'),
+('en retard');
 
-/* 7. Prêt de test : 10 000 Ar sur 5 mois, taux 10% */
-INSERT INTO ef_pret_db_pret
-  (client_id, taux_pret_id, montant, duree_mois, date_pret, statut_id)
-VALUES
-  (1, 1, 10000.00, 5, '2025-07-01', 1);
+INSERT INTO ef_pret_db_type_pret (nom_type_pret) VALUES
+('Crédit consommation'),
+('Crédit logement');
 
+INSERT INTO ef_pret_db_taux_pret (id_type_pret, taux, min_mois, max_mois) VALUES
+(1, 5.00, 0, 6),
+(1, 6.50, 7, 12),
+(1, 7.00, 13, 24),
+(2, 4.00, 0, 12),
+(2, 5.50, 13, 36);
+
+INSERT INTO ef_pret_db_pret (id_client, id_taux_pret, montant, duree_mois, id_statut_pret) VALUES
+(1, 1, 500000.00, 6, 1), -- Jean, taux 5%, en cours
+(2, 2, 800000.00, 12, 1), -- Sarah, taux 6.5%, en cours
+(3, 3, 1000000.00, 24, 2); -- Andry, taux 7%, remboursé
+
+INSERT INTO ef_pret_db_remboursement (id_pret, date_paiement, mois, annee) VALUES
+(1, '2025-06-10', 6, 2025),
+(1, '2025-07-05', 7, 2025),
+(2, '2025-07-08', 7, 2025);
