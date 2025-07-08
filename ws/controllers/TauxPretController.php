@@ -18,28 +18,28 @@ class TauxPretController
         $taux_list = array_map('floatval', $data['taux']);
 
         try {
-            
+
             $mois_total = range(0, $sup_mois);
             $mois_couverts = [];
 
-          
+
             for ($i = 0; $i <= $inf_mois; $i++) {
                 $mois_couverts[$i] = true;
             }
 
-          
+
             for ($i = 0; $i < count($min_list); $i++) {
                 for ($m = $min_list[$i]; $m <= $max_list[$i]; $m++) {
                     $mois_couverts[$m] = true;
                 }
             }
 
-   
+
             for ($i = $sup_mois + 1; $i <= 1000; $i++) {
                 $mois_couverts[$i] = true;
             }
 
-            
+
             $mois_oublies = [];
             foreach ($mois_total as $m) {
                 if (!isset($mois_couverts[$m])) {
@@ -51,7 +51,7 @@ class TauxPretController
                 throw new Exception("Les mois suivants ne sont couverts par aucun intervalle : " . implode(', ', $mois_oublies));
             }
 
-            
+
             $intervalles = [];
             $intervalles[] = ['min' => 0, 'max' => $inf_mois];
             for ($i = 0; $i < count($min_list); $i++) {
@@ -59,12 +59,12 @@ class TauxPretController
             }
             $intervalles[] = ['min' => $sup_mois + 1, 'max' => 1000];
 
-           
+
             usort($intervalles, function ($a, $b) {
                 return $a['min'] - $b['min'];
             });
 
-            
+
             for ($i = 1; $i < count($intervalles); $i++) {
                 $prev = $intervalles[$i - 1];
                 $curr = $intervalles[$i];
@@ -74,7 +74,7 @@ class TauxPretController
                 }
             }
 
-            
+
             $model = new TauxPret();
             $model->ajouter_pret_et_taux(
                 $type_pret,
@@ -93,16 +93,25 @@ class TauxPretController
         }
     }
 
-    public static function getAll() {
+    public static function getAll()
+    {
         $model = new TauxPret();
         $result = $model->getAllTaux();
         Flight::json($result);
     }
-    
 
-    public static function getAllWidthType() {
+
+    public static function getAllWidthType()
+    {
         $model = new TauxPret();
         $result = $model->getAllWidthType();
+        Flight::json($result);
+    }
+
+    public static function getTauxByDuree($id_type_pret, $duree)
+    {
+        $model = new TauxPret();
+        $result = $model->getTauxByDuree($id_type_pret, $duree);
         Flight::json($result);
     }
 }

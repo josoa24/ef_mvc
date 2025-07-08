@@ -28,6 +28,9 @@ CREATE TABLE ef_pret_db_client (
     telephone VARCHAR(20)
 );
 
+ALTER TABLE ef_pret_db_client
+ADD COLUMN created_at DATETIME DEFAULT CURRENT_TIMESTAMP;
+
 
 CREATE TABLE ef_pret_db_ajout_fonds (
     id_ajout_fonds INT AUTO_INCREMENT PRIMARY KEY,
@@ -66,7 +69,7 @@ CREATE TABLE ef_pret_db_pret (
     id_taux_pret INT NOT NULL,
     montant DECIMAL(15, 2) NOT NULL,
     duree_mois INT NOT NULL,
-    date_pret DATE DEFAULT CURRENT_DATE,
+    date_pret DATE ,
     id_statut_pret INT NOT NULL,
     FOREIGN KEY (id_client) REFERENCES ef_pret_db_client (id_client),
     FOREIGN KEY (id_taux_pret) REFERENCES ef_pret_db_taux_pret (id_taux_pret),
@@ -77,9 +80,11 @@ CREATE TABLE ef_pret_db_remboursement (
     id_remboursement INT AUTO_INCREMENT PRIMARY KEY,
     id_pret INT NOT NULL,
     date_paiement DATE NOT NULL,
-    mois INT NOT NULL,
-    annee INT NOT NULL,
+
+    mois int not NULL,
+    annee int not NULL,
     FOREIGN KEY (id_pret) REFERENCES ef_pret_db_pret(id_pret)
 );
+
 
 
