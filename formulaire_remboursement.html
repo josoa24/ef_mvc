@@ -1,34 +1,158 @@
 <!DOCTYPE html>
 <html lang="fr">
+
 <head>
   <meta charset="UTF-8">
   <title>Ajout Remboursement</title>
 
   <link rel="stylesheet" href="assets/css/remboursement.css">
-
+  <link rel="stylesheet" href="assets/css/acceuil.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap">
 </head>
+
 <body>
+  <!-- Navigation Top Bar -->
+  <nav class="top-navbar">
+    <div class="nav-brand">
+      <i class="fas fa-university"></i>
+      <span>BankFlow Pro</span>
+    </div>
+    <div class="nav-actions">
+      <div class="user-profile">
+        <i class="fas fa-user-circle"></i>
+        <span>Admin</span>
+        <i class="fas fa-chevron-down"></i>
+      </div>
+      <div class="notification-icon">
+        <i class="fas fa-bell"></i>
+        <span class="notification-badge">3</span>
+      </div>
+    </div>
+  </nav>
 
-  <h1>Ajout d'un Remboursement</h1>
+  <!-- Sidebar -->
+  <aside class="sidebar">
+    <div class="sidebar-header">
+      <h3>Menu Principal</h3>
+    </div>
+    <nav class="sidebar-nav">
+      <ul>
+        <li class="nav-item active">
+          <a href="dashboard.html" class="nav-link">
+            <i class="fas fa-tachometer-alt"></i>
+            <span>Tableau de Bord</span>
+          </a>
+        </li>
+        <li class="nav-item">
+          <a href="clients.html" class="nav-link">
+            <i class="fas fa-users"></i>
+            <span>Clients</span>
+          </a>
+        </li>
+        <li class="nav-item">
+          <a href="prets.html" class="nav-link">
+            <i class="fas fa-money-check-alt"></i>
+            <span>Prêts</span>
+          </a>
+        </li>
+        <li class="nav-item">
+          <a href="fonds.html" class="nav-link">
+            <i class="fas fa-piggy-bank"></i>
+            <span>Fonds</span>
+          </a>
+        </li>
+        <li class="nav-item">
+          <a href="taux.htm" class="nav-link">
+            <i class="fas fa-percentage"></i>
+            <span>Taux de Prêt</span>
+          </a>
+        </li>
+        <li class="nav-item">
+          <a href="interets_graphique.html" class="nav-link">
+            <i class="fas fa-chart-line"></i>
+            <span>Interets Gagnés</span>
+          </a>
+        </li>
+        <li class="nav-item">
+          <a href="formulaire_remboursement.html" class="nav-link">
+            <i class="fas fa-cog"></i>
+            <span>Remboursement</span>
+          </a>
+        </li>
+        <li class="nav-item">
+          <a href="parametres.html" class="nav-link">
+            <i class="fas fa-cog"></i>
+            <span>Paramètres</span>
+          </a>
+        </li>
+      </ul>
+    </nav>
+  </aside>
 
-  <div class="container">
-    <label for="id_pret">Prêt :</label>
-    <select id="id_pret" required>
-      <option value="">-- Sélectionner un prêt --</option>
-    </select>
 
-    <label for="date_paiement">Date de paiement :</label>
-    <input type="date" id="date_paiement" required>
+  <!-- Contenu principal (à remplacer dans votre fichier) -->
+  <div class="wrapperContainer">
+    <main class="content-wrapper">
+      <div class="remboursement-header">
+        <h1><i class="fas fa-money-check-alt"></i> Enregistrement de Remboursement</h1>
+        <p class="subtitle">Saisissez les détails du remboursement du prêt</p>
+      </div>
 
-    <label for="mois">Mois :</label>
-    <input type="number" id="mois" min="1" max="12" required>
+      <div class="remboursement-card">
+        <form id="remboursement-form" class="remboursement-form">
+          <div class="form-group dual-inputs">
+            <div class="input-group">
+              <label for="id_pret"><i class="fas fa-hand-holding-usd"></i> Sélection du Prêt</label>
+              <div class="select-wrapper">
+                <select id="id_pret" required>
+                  <option value="">-- Choisir un prêt --</option>
+                </select>
+                <i class="fas fa-chevron-down"></i>
+              </div>
+            </div>
 
-    <label for="annee">Année :</label>
-    <input type="number" id="annee" min="2000" required>
+            <div class="input-group">
+              <label for="date_paiement"><i class="fas fa-calendar-day"></i> Date de Paiement</label>
+              <input type="date" id="date_paiement" required>
+            </div>
+          </div>
 
-    <button id="valider-btn">Valider</button>
+          <div class="form-group dual-inputs">
+            <div class="input-group">
+              <label for="mois"><i class="fas fa-calendar-alt"></i> Mois</label>
+              <div class="number-input">
+                <input type="number" id="mois" min="1" max="12" placeholder="MM" required>
+              </div>
+            </div>
 
-    <div id="message"></div>
+            <div class="input-group">
+              <label for="annee"><i class="fas fa-calendar"></i> Année</label>
+              <div class="number-input">
+                <input type="number" id="annee" min="2000" placeholder="AAAA" required>
+              </div>
+            </div>
+          </div>
+
+          <div class="form-actions">
+            <button type="button" id="valider-btn" class="submit-btn">
+              <i class="fas fa-check-circle"></i> Enregistrer le Remboursement
+            </button>
+          </div>
+
+          <div id="message" class="status-message"></div>
+        </form>
+
+        <div class="remboursement-info">
+          <h3><i class="fas fa-info-circle"></i> Instructions</h3>
+          <ul>
+            <li>Vérifiez que la date correspond au reçu client</li>
+            <li>Le mois/année doit correspondre à l'échéance</li>
+            <li>Un SMS de confirmation sera envoyé automatiquement</li>
+          </ul>
+        </div>
+      </div>
+    </main>
   </div>
 
   <script src="url.js"></script>
@@ -65,43 +189,70 @@
           message.textContent = "Erreur réseau.";
         });
 
-      // Envoi via bouton
-      btnValider.addEventListener("click", () => {
-        if (!selectPret.value || !datePaiement.value || !mois.value || !annee.value) {
-          message.style.color = "red";
-          message.textContent = "Veuillez remplir tous les champs.";
-          return;
+        // Modifier la partie JavaScript comme suit :
+btnValider.addEventListener("click", () => {
+    // Reset et cacher le message précédent
+    message.textContent = "";
+    message.className = "status-message";
+    
+    // Vérification des champs
+    if (!selectPret.value || !datePaiement.value || !mois.value || !annee.value) {
+        message.classList.add("error", "visible");
+        message.textContent = "Veuillez remplir tous les champs obligatoires.";
+        
+        // Animation sur les champs vides
+        if (!selectPret.value) {
+            document.querySelector('.select-wrapper').classList.add('error-shake');
+            setTimeout(() => document.querySelector('.select-wrapper').classList.remove('error-shake'), 400);
         }
+        if (!datePaiement.value) {
+            datePaiement.classList.add('error-shake');
+            setTimeout(() => datePaiement.classList.remove('error-shake'), 400);
+        }
+        if (!mois.value) {
+            document.querySelector('#mois').parentElement.classList.add('error-shake');
+            setTimeout(() => document.querySelector('#mois').parentElement.classList.remove('error-shake'), 400);
+        }
+        if (!annee.value) {
+            document.querySelector('#annee').parentElement.classList.add('error-shake');
+            setTimeout(() => document.querySelector('#annee').parentElement.classList.remove('error-shake'), 400);
+        }
+        
+        return;
+    }
 
-        const data = new URLSearchParams();
-        data.append("id_pret", selectPret.value);
-        data.append("date_paiement", datePaiement.value);
-        data.append("mois", mois.value);
-        data.append("annee", annee.value);
+    const data = new URLSearchParams();
+    data.append("id_pret", selectPret.value);
+    data.append("date_paiement", datePaiement.value);
+    data.append("mois", mois.value);
+    data.append("annee", annee.value);
 
-        fetch(apiBase + "/remboursements", {
-          method: "POST",
-          body: data
-        })
-          .then(res => res.json())
-          .then(result => {
-            message.style.color = result.success ? "green" : "red";
-            message.textContent = result.message;
-            if (result.success) {
-              selectPret.value = "";
-              datePaiement.value = "";
-              mois.value = "";
-              annee.value = "";
-            }
-          })
-          .catch(err => {
-            console.error("Erreur lors de l'envoi :", err);
-            message.style.color = "red";
-            message.textContent = "Erreur lors de l'envoi.";
-          });
-      });
+    fetch(apiBase + "/remboursements", {
+        method: "POST",
+        body: data
+    })
+    .then(res => res.json())
+    .then(result => {
+        message.classList.add(result.success ? "success" : "error", "visible");
+        message.textContent = result.message;
+        
+        if (result.success) {
+            selectPret.value = "";
+            datePaiement.value = "";
+            mois.value = "";
+            annee.value = "";
+        }
+    })
+    .catch(err => {
+        console.error("Erreur lors de l'envoi :", err);
+        message.classList.add("error", "visible");
+        message.textContent = "Erreur réseau lors de l'envoi des données.";
+    });
+});
+
     });
   </script>
 
 </body>
+
 </html>
