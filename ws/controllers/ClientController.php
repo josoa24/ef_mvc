@@ -34,4 +34,26 @@ class ClientController
         Client::delete($id);
         Flight::json(['message' => 'Client supprimé']);
     }
+
+    public static function getCount()
+    {
+        $count = Client::getCount();
+        Flight::json([
+            'success' => true,
+            'total_clients' => $count
+        ]);
+    }
+
+
+    public static function getIncrease()
+    {
+        $increaseData = Client::getLastMonthIncrease();
+        $totalClients = Client::getCount();
+
+        Flight::json([
+            'success' => true,
+            'total_clients' => $totalClients,
+            'increase_percentage' => $increaseData['augmentation_pct']
+        ]);
+    }
 }

@@ -33,61 +33,29 @@ class Collection implements \ArrayAccess, \Iterator, \Countable, \JsonSerializab
         $this->data = $data;
     }
 
-    /**
-     * Gets an item.
-     *
-     * @param string $key Key
-     * @return mixed Value
-     */
     public function __get($key) {
         return isset($this->data[$key]) ? $this->data[$key] : null;
     }
 
-    /**
-     * Set an item.
-     *
-     * @param string $key Key
-     * @param mixed $value Value
-     */
     public function __set($key, $value) {
         $this->data[$key] = $value;
     }
 
-    /**
-     * Checks if an item exists.
-     *
-     * @param string $key Key
-     * @return bool Item status
-     */
     public function __isset($key) {
         return isset($this->data[$key]);
     }
 
-    /**
-     * Removes an item.
-     *
-     * @param string $key Key
-     */
     public function __unset($key) {
         unset($this->data[$key]);
     }
 
-    /**
-     * Gets an item at the offset.
-     *
-     * @param string $offset Offset
-     * @return mixed Value
-     */
+    // ---------- ArrayAccess ----------
+    #[\ReturnTypeWillChange]
     public function offsetGet($offset) {
         return isset($this->data[$offset]) ? $this->data[$offset] : null;
     }
 
-    /**
-     * Sets an item at the offset.
-     *
-     * @param string $offset Offset
-     * @param mixed $value Value
-     */
+    #[\ReturnTypeWillChange]
     public function offsetSet($offset, $value) {
         if (is_null($offset)) {
             $this->data[] = $value;
@@ -97,119 +65,66 @@ class Collection implements \ArrayAccess, \Iterator, \Countable, \JsonSerializab
         }
     }
 
-    /**
-     * Checks if an item exists at the offset.
-     *
-     * @param string $offset Offset
-     * @return bool Item status
-     */
+    #[\ReturnTypeWillChange]
     public function offsetExists($offset) {
         return isset($this->data[$offset]);
     }
 
-    /**
-     * Removes an item at the offset.
-     *
-     * @param string $offset Offset
-     */
+    #[\ReturnTypeWillChange]
     public function offsetUnset($offset) {
         unset($this->data[$offset]);
     }
 
-    /**
-     * Resets the collection.
-     */
+    // ---------- Iterator ----------
+    #[\ReturnTypeWillChange]
     public function rewind() {
         reset($this->data);
     }
- 
-    /**
-     * Gets current collection item.
-     *
-     * @return mixed Value
-     */ 
+
+    #[\ReturnTypeWillChange]
     public function current() {
         return current($this->data);
     }
- 
-    /**
-     * Gets current collection key.
-     *
-     * @return mixed Value
-     */ 
+
+    #[\ReturnTypeWillChange]
     public function key() {
         return key($this->data);
     }
- 
-    /**
-     * Gets the next collection value.
-     *
-     * @return mixed Value
-     */ 
-    public function next() 
-    {
+
+    #[\ReturnTypeWillChange]
+    public function next() {
         return next($this->data);
     }
- 
-    /**
-     * Checks if the current collection key is valid.
-     *
-     * @return bool Key status
-     */ 
-    public function valid()
-    {
+
+    #[\ReturnTypeWillChange]
+    public function valid() {
         $key = key($this->data);
-        return ($key !== NULL && $key !== FALSE);
+        return ($key !== null && $key !== false);
     }
 
-    /**
-     * Gets the size of the collection.
-     *
-     * @return int Collection size
-     */
-    public function count() {
-        return sizeof($this->data);
+    // ---------- Countable ----------
+    public function count(): int {
+        return count($this->data);
     }
 
-    /**
-     * Gets the item keys.
-     *
-     * @return array Collection keys
-     */
-    public function keys() {
+    public function keys(): array {
         return array_keys($this->data);
     }
 
-    /**
-     * Gets the collection data.
-     *
-     * @return array Collection data
-     */
-    public function getData() {
+    public function getData(): array {
         return $this->data;
     }
 
-    /**
-     * Sets the collection data.
-     *
-     * @param array $data New collection data
-     */
     public function setData(array $data) {
         $this->data = $data;
     }
 
-    /**
-     * Gets the collection data which can be serialized to JSON
-     *
-     * @return array Collection data which can be serialized by <b>json_encode</b>
-     */
+    // ---------- JsonSerializable ----------
+    #[\ReturnTypeWillChange]
     public function jsonSerialize() {
         return $this->data;
     }
 
-    /**
-     * Removes all items from the collection.
-     */
     public function clear() {
         $this->data = array();
     }

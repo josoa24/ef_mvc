@@ -34,4 +34,23 @@ class EtablissementFinancierController
         EtablissementFinancier::delete($id);
         Flight::json(['message' => 'Établissement financier supprimé']);
     }
+
+    public static function getMontantsDisponiblesParMois()
+    {
+        $request = Flight::request();
+        $dateDebut = $request->query['dateDebut'] ?? null;
+        $dateFin = $request->query['dateFin'] ?? null;
+
+        if (!$dateDebut || !$dateFin) {
+            Flight::json(['success' => false, 'message' => 'Paramètres dateDebut et dateFin requis'], 400);
+            return;
+        }
+
+        try {
+            $result = EtablissementFinancier::calculMontantsDisponiblesParMois($dateDebut, $dateFin);
+            Flight::json($result);
+        } catch (Exception $e) {
+            Flight::json(['success' => false, 'message' => $e->getMessage()], 500);
+        }
+    }
 }
