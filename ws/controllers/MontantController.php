@@ -1,5 +1,5 @@
 <?php
-require_once __DIR__ . '/../models/MontantModel.php';
+require_once __DIR__ . '/../models/Montant.php';
 
 class MontantController {
     public static function getMontantsParMois() {
