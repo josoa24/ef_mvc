@@ -8,13 +8,24 @@ class Pret
     {
         $db = getDB();
         $sql = "
-            SELECT p.*, c.nom_client, t.taux, s.libelle AS statut
-            FROM ef_pret_db_pret p
-            JOIN ef_pret_db_client c ON p.id_client = c.id_client
-            JOIN ef_pret_db_taux_pret t ON p.id_taux_pret = t.id_taux_pret
-            JOIN ef_pret_db_statut_pret s ON p.id_statut_pret = s.id_statut_pret
-            ORDER BY p.date_pret DESC
-        ";
+        SELECT 
+            p.id_pret,
+            p.id_client,
+            c.nom_client,
+            p.id_taux_pret,
+            t.taux,
+            p.montant,
+            p.duree_mois,
+            p.date_pret,
+            p.id_statut_pret,
+            s.libelle AS statut
+        FROM ef_pret_db_pret p
+        JOIN ef_pret_db_client c ON p.id_client = c.id_client
+        JOIN ef_pret_db_taux_pret t ON p.id_taux_pret = t.id_taux_pret
+        JOIN ef_pret_db_statut_pret s ON p.id_statut_pret = s.id_statut_pret
+        ORDER BY p.date_pret DESC
+    ";
+
         $stmt = $db->query($sql);
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
@@ -92,7 +103,7 @@ class Pret
     }
     public function calculerRemboursement($id_client, $id_type_pret, $montant, $mois)
     {
-        // Récupération du taux correspondant
+
         $db = getDB();
         $stmt = $db->prepare("
             SELECT t.id_taux_pret, t.taux

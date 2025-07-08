@@ -39,11 +39,11 @@
       </div>
       <nav class="sidebar-nav">
         <ul>
-          <li class="nav-item active">
-            <a href="accueil.html" class="nav-link">
-              <i class="fas fa-tachometer-alt"></i>
-              <span>Tableau de Bord</span>
-            </a>
+          <li class="nav-item">
+            <a href="accueil.html" class="nav-link"
+              ><i class="fas fa-tachometer-alt"></i
+              ><span>Tableau de Bord</span></a
+            >
           </li>
           <li class="nav-item">
             <a href="ajouter_taux_pret.html" class="nav-link"
@@ -60,8 +60,8 @@
               ><i class="fas fa-money-check-alt"></i><span>Prêts</span></a
             >
           </li>
-          <li class="nav-item">
-            <a href="fonds.html" class="nav-link"
+          <li class="nav-item active">
+            <a href="ajout_fonds.html" class="nav-link"
               ><i class="fas fa-piggy-bank"></i><span>Fonds</span></a
             >
           </li>
@@ -126,9 +126,6 @@
       </div>
 
       <div class="action-buttons">
-        <button class="btn btn-primary" onclick="openModal('addLoanModal')">
-          <i class="fas fa-plus"></i>Nouveau Prêt
-        </button>
         <button class="btn btn-success" onclick="openModal('addFundsModal')">
           <i class="fas fa-plus"></i>Ajouter Fonds
         </button>
@@ -136,20 +133,15 @@
 
       <div class="data-section">
         <div class="section-header">
-          <h2>Prêts Récents</h2>
-          <button class="btn btn-outline">Voir Tout</button>
+          <h2>Fonds Ajoutés</h2>
         </div>
         <div class="table-container">
-          <table id="table-prets" class="data-table">
+          <table id="table-fonds" class="data-table">
             <thead>
               <tr>
                 <th>Client</th>
-                <th>Taux (%)</th>
                 <th>Montant</th>
-                <th>Durée (mois)</th>
-                <th>Date du prêt</th>
-                <th>Statut</th>
-                <th>Actions</th>
+                <th>Date d'ajout</th>
               </tr>
             </thead>
             <tbody></tbody>
@@ -284,8 +276,7 @@
 
     <script src="url.js" defer></script>
     <script src="ajax.js" defer></script>
-    <script src="pret.js" defer></script>
-    <script src="assets/js/script.js" defer></script>
     <script src="ajout_fond.js" defer></script>
+    <script src="assets/js/script.js" defer></script>
   </body>
 </html>

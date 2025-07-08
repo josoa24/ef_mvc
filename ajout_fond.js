@@ -1,5 +1,3 @@
-
-
 function chargerFonds() {
   ajax("GET", "/ajout_fonds", null, (data) => {
     const tbody = document.querySelector("#table-fonds tbody");
@@ -31,17 +29,17 @@ function remplirFormulaire(f) {
   document.getElementById("date_ajout").value = f.date_ajout.replace(" ", "T");
 }
 
-function ajouterOuModifier() {
+function ajouterOuModifierFonds() {
   const id = document.getElementById("id_ajout_fonds").value;
   const ef = document.getElementById("id_etablissement_financier").value;
-  const client = document.getElementById("id_client").value;
-  const montant = document.getElementById("montant").value;
+  const client = document.getElementById("id_client_fonds").value;
+  const montant = document.getElementById("montant_fonds").value;
   const date = document.getElementById("date_ajout").value;
 
   const data = `id_etablissement_financier=${ef}&id_client=${client}&montant=${montant}&date_ajout=${encodeURIComponent(
     date
   )}`;
-
+  console.log(data);
   if (id) {
     ajax("PUT", `/ajout_fonds/${id}`, data, () => {
       resetForm();
@@ -81,7 +79,7 @@ function chargerSelects() {
   });
 
   ajax("GET", "/clients", null, (data) => {
-    const select = document.getElementById("id_client");
+    const select = document.getElementById("id_client_fonds");
     select.innerHTML = '<option value="">-- Client --</option>';
     data.forEach((c) => {
       select.innerHTML += `<option value="${c.id_client}">${c.nom_client}</option>`;
