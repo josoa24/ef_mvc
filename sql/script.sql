@@ -5,11 +5,20 @@ CREATE DATABASE IF NOT EXISTS ef_pret_db;
 
 USE ef_pret_db;
 
+
+CREATE TABLE ef_pret_db_admin (
+    id_admin INT AUTO_INCREMENT PRIMARY KEY,
+    user_name VARCHAR(100) NOT NULL,
+    identifiant_admin VARCHAR(50) UNIQUE NOT NULL
+);
+
+
 CREATE TABLE ef_pret_db_etablissement_financier (
     id_etablissement_financier INT AUTO_INCREMENT PRIMARY KEY,
     nom_etablissement_financier VARCHAR(100) NOT NULL,
     fonds_de_base DECIMAL(15, 2) DEFAULT 0.00
 );
+
 
 CREATE TABLE ef_pret_db_client (
     id_client INT AUTO_INCREMENT PRIMARY KEY,
@@ -18,6 +27,7 @@ CREATE TABLE ef_pret_db_client (
     email VARCHAR(100),
     telephone VARCHAR(20)
 );
+
 
 CREATE TABLE ef_pret_db_ajout_fonds (
     id_ajout_fonds INT AUTO_INCREMENT PRIMARY KEY,
@@ -29,11 +39,13 @@ CREATE TABLE ef_pret_db_ajout_fonds (
     FOREIGN KEY (id_client) REFERENCES ef_pret_db_client (id_client)
 );
 
+
 CREATE TABLE ef_pret_db_type_pret (
     id_type_pret INT AUTO_INCREMENT PRIMARY KEY,
     nom_type_pret VARCHAR(100) NOT NULL
 );
 
+-- Table taux prêt
 CREATE TABLE ef_pret_db_taux_pret (
     id_taux_pret INT AUTO_INCREMENT PRIMARY KEY,
     id_type_pret INT NOT NULL,
@@ -60,3 +72,12 @@ CREATE TABLE ef_pret_db_pret (
     FOREIGN KEY (id_taux_pret) REFERENCES ef_pret_db_taux_pret (id_taux_pret),
     FOREIGN KEY (id_statut_pret) REFERENCES ef_pret_db_statut_pret (id_statut_pret)
 );
+
+CREATE TABLE ef_pret_db_remboursement (
+    id_remboursement INT AUTO_INCREMENT PRIMARY KEY,
+    id_pret INT NOT NULL,
+    date_paiement DATE NOT NULL,
+    FOREIGN KEY (id_pret) REFERENCES ef_pret_db_pret(id_pret)
+);
+
+
