@@ -8,13 +8,24 @@ class Pret
     {
         $db = getDB();
         $sql = "
-            SELECT p.*, c.nom_client, t.taux, s.libelle AS statut
-            FROM ef_pret_db_pret p
-            JOIN ef_pret_db_client c ON p.id_client = c.id_client
-            JOIN ef_pret_db_taux_pret t ON p.id_taux_pret = t.id_taux_pret
-            JOIN ef_pret_db_statut_pret s ON p.id_statut_pret = s.id_statut_pret
-            ORDER BY p.date_pret DESC
-        ";
+        SELECT 
+            p.id_pret,
+            p.id_client,
+            c.nom_client,
+            p.id_taux_pret,
+            t.taux,
+            p.montant,
+            p.duree_mois,
+            p.date_pret,
+            p.id_statut_pret,
+            s.libelle AS statut
+        FROM ef_pret_db_pret p
+        JOIN ef_pret_db_client c ON p.id_client = c.id_client
+        JOIN ef_pret_db_taux_pret t ON p.id_taux_pret = t.id_taux_pret
+        JOIN ef_pret_db_statut_pret s ON p.id_statut_pret = s.id_statut_pret
+        ORDER BY p.date_pret DESC
+    ";
+
         $stmt = $db->query($sql);
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
@@ -36,14 +47,15 @@ class Pret
     }
 
 
-    public static function getAllWithClient() {
-    $db = getDB();
-    $stmt = $db->query("SELECT p.id_pret, p.montant, c.nom_client 
+    public static function getAllWithClient()
+    {
+        $db = getDB();
+        $stmt = $db->query("SELECT p.id_pret, p.montant, c.nom_client 
                         FROM ef_pret_db_pret p 
                         JOIN ef_pret_db_client c ON p.client_id = c.id_client
                         WHERE p.statut_id = 1"); // par ex: prêts "en cours"
-    return $stmt->fetchAll(PDO::FETCH_ASSOC);
-}
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    }
 
 
     public static function create($data)
@@ -89,10 +101,11 @@ class Pret
         $stmt = $db->prepare("DELETE FROM ef_pret_db_pret WHERE id_pret = ?");
         $stmt->execute([$id]);
     }
-  public function calculerRemboursement($id_client, $id_type_pret, $montant, $mois) {
-        // Récupération du taux correspondant
-    $db = getDB();    
-    $stmt = $db->prepare("
+    public function calculerRemboursement($id_client, $id_type_pret, $montant, $mois)
+    {
+
+        $db = getDB();
+        $stmt = $db->prepare("
             SELECT t.id_taux_pret, t.taux
             FROM ef_pret_db_taux_pret t
             JOIN ef_pret_db_type_pret tp ON tp.id_type_pret = t.id_type_pret
@@ -118,6 +131,5 @@ class Pret
             "taux" => $taux,
             "mensualite" => $mensualite
         ];
-  }
-
+    }
 }

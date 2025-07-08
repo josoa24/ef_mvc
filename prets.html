@@ -1,0 +1,286 @@
+<!DOCTYPE html>
+<html lang="fr">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Gestion Bancaire - Établissement Financier</title>
+    <link rel="stylesheet" href="assets/css/acceuil.css" />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css"
+    />
+    <link
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap"
+    />
+  </head>
+  <body>
+    <nav class="top-navbar">
+      <div class="nav-brand">
+        <i class="fas fa-university"></i>
+        <span>BankFlow Pro</span>
+      </div>
+      <div class="nav-actions">
+        <div class="user-profile">
+          <i class="fas fa-user-circle"></i>
+          <span>Admin</span>
+          <i class="fas fa-chevron-down"></i>
+        </div>
+        <div class="notification-icon">
+          <i class="fas fa-bell"></i>
+          <span class="notification-badge">3</span>
+        </div>
+      </div>
+    </nav>
+
+    <aside class="sidebar">
+      <div class="sidebar-header">
+        <h3>Menu Principal</h3>
+      </div>
+      <nav class="sidebar-nav">
+        <ul>
+          <li class="nav-item">
+            <a href="accueil.html" class="nav-link"
+              ><i class="fas fa-tachometer-alt"></i
+              ><span>Tableau de Bord</span></a
+            >
+          </li>
+          <li class="nav-item">
+            <a href="ajouter_taux_pret.html" class="nav-link"
+              ><i class="fas fa-percentage"></i><span>Configurer Taux</span></a
+            >
+          </li>
+          <li class="nav-item">
+            <a href="clients.html" class="nav-link"
+              ><i class="fas fa-users"></i><span>Clients</span></a
+            >
+          </li>
+          <li class="nav-item active">
+            <a href="prets.html" class="nav-link"
+              ><i class="fas fa-money-check-alt"></i><span>Prêts</span></a
+            >
+          </li>
+          <li class="nav-item">
+            <a href="ajout_fonds.html" class="nav-link"
+              ><i class="fas fa-piggy-bank"></i><span>Fonds</span></a
+            >
+          </li>
+          <li class="nav-item">
+            <a href="taux.htm" class="nav-link"
+              ><i class="fas fa-percentage"></i><span>Taux de Prêt</span></a
+            >
+          </li>
+          <li class="nav-item">
+            <a href="interets_graphique.html" class="nav-link"
+              ><i class="fas fa-chart-line"></i><span>Interets Gagnés</span></a
+            >
+          </li>
+          <li class="nav-item">
+            <a href="parametres.html" class="nav-link"
+              ><i class="fas fa-cog"></i><span>Paramètres</span></a
+            >
+          </li>
+        </ul>
+      </nav>
+    </aside>
+
+    <main class="main-content">
+      <div class="dashboard-cards">
+        <div class="card">
+          <div class="card-header">
+            <h3>Prêts Actifs</h3>
+            <i class="fas fa-money-check-alt"></i>
+          </div>
+          <div class="card-body">
+            <div class="card-value">156</div>
+            <div class="card-trend positive">
+              <i class="fas fa-arrow-up"></i>+12% ce mois
+            </div>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="card-header">
+            <h3>Clients Actifs</h3>
+            <i class="fas fa-users"></i>
+          </div>
+          <div class="card-body">
+            <div class="card-value">89</div>
+            <div class="card-trend positive">
+              <i class="fas fa-arrow-up"></i>+5% ce mois
+            </div>
+          </div>
+        </div>
+        <div class="card">
+          <div class="card-header">
+            <h3>Fonds Disponibles</h3>
+            <i class="fas fa-piggy-bank"></i>
+          </div>
+          <div class="card-body">
+            <div class="card-value">890,000 Ar</div>
+            <div class="card-trend negative">
+              <i class="fas fa-arrow-down"></i>-3% ce mois
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="action-buttons">
+        <button class="btn btn-primary" onclick="openModal('addLoanModal')">
+          <i class="fas fa-plus"></i>Nouveau Prêt
+        </button>
+      </div>
+
+      <div class="data-section">
+        <div class="section-header">
+          <h2>Prêts Récents</h2>
+          <button class="btn btn-outline">Voir Tout</button>
+        </div>
+        <div class="table-container">
+          <table id="table-prets" class="data-table">
+            <thead>
+              <tr>
+                <th>Client</th>
+                <th>Taux (%)</th>
+                <th>Montant</th>
+                <th>Durée (mois)</th>
+                <th>Date du prêt</th>
+                <th>Statut</th>
+              </tr>
+            </thead>
+            <tbody></tbody>
+          </table>
+        </div>
+      </div>
+    </main>
+
+    <div id="addLoanModal" class="modal">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h3>Nouveau Prêt</h3>
+          <span class="close" onclick="closeModal('addLoanModal')"
+            >&times;</span
+          >
+        </div>
+        <form class="modal-form">
+          <div class="form-group">
+            <label for="clientSelect">Nom du Client</label>
+            <select id="id_client" class="form-control"></select>
+          </div>
+          <div class="form-group">
+            <label for="loanTypeSelect">Taux de Prêt</label>
+            <select id="id_taux_pret" class="form-control"></select>
+          </div>
+          <div class="form-group">
+            <label for="repaymentMode">Montant (Ar)</label>
+            <input
+              type="number"
+              id="montant"
+              class="form-control"
+              placeholder="Entrez le montant"
+            />
+          </div>
+          <div class="form-group">
+            <label for="repaymentMode">Durée (mois)</label>
+            <input
+              type="number"
+              id="duree_mois"
+              class="form-control"
+              placeholder="Durée"
+            />
+          </div>
+          <div class="form-group">
+            <label for="repaymentMode">Date du prêt</label>
+            <input type="date" id="date_pret" class="form-control" />
+          </div>
+          <input
+            type="hidden"
+            id="id_statut_pret"
+            name="id_statut_pret"
+            value=""
+          />
+
+          <input type="hidden" id="id_pret" />
+          <div class="form-actions">
+            <button
+              type="button"
+              class="btn btn-secondary"
+              onclick="closeModal('addLoanModal')"
+            >
+              Annuler
+            </button>
+            <button
+              type="button"
+              class="btn btn-primary"
+              onclick="ajouterOuModifier()"
+            >
+              Valider
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+
+    <div id="addFundsModal" class="modal">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h3>Ajouter Fonds</h3>
+          <span class="close" onclick="closeModal('addFundsModal')"
+            >&times;</span
+          >
+        </div>
+        <form
+          class="modal-form"
+          onsubmit="ajouterOuModifierFonds(); return false;"
+        >
+          <input type="hidden" id="id_ajout_fonds" />
+
+          <div class="form-group">
+            <label for="id_etablissement_financier">Établissement</label>
+            <select id="id_etablissement_financier" class="form-control">
+              <option value="">-- Établissement --</option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label for="id_client_fonds">Client</label>
+            <select id="id_client_fonds" class="form-control">
+              <option value="">-- Client --</option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label for="montant_fonds">Montant (Ar)</label>
+            <input
+              type="number"
+              id="montant_fonds"
+              class="form-control"
+              placeholder="Montant"
+            />
+          </div>
+
+          <div class="form-group">
+            <label for="date_ajout">Date d'ajout</label>
+            <input type="datetime-local" id="date_ajout" class="form-control" />
+          </div>
+
+          <div class="form-actions">
+            <button
+              type="button"
+              class="btn btn-secondary"
+              onclick="closeModal('addFundsModal')"
+            >
+              Annuler
+            </button>
+            <button type="submit" class="btn btn-success">Valider</button>
+          </div>
+        </form>
+      </div>
+    </div>
+
+    <script src="url.js" defer></script>
+    <script src="ajax.js" defer></script>
+    <script src="pret.js" defer></script>
+    <script src="assets/js/script.js" defer></script>
+  </body>
+</html>
