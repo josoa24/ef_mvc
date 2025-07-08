@@ -1,0 +1,76 @@
+
+    :root {
+      --bleu: #007acc;
+      --bleu-clair: #e6f2fb;
+      --vert: #28a745;
+      --vert-foncé: #218838;
+      --gris: #f9f9f9;
+      --ombre: rgba(0, 0, 0, 0.1);
+    }
+
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background-color: var(--bleu-clair);
+      margin: 0;
+      padding: 0;
+    }
+
+    h1 {
+      text-align: center;
+      color: var(--bleu);
+      padding: 20px 0;
+      background-color: white;
+      box-shadow: 0 2px 4px var(--ombre);
+      margin-bottom: 20px;
+    }
+
+    .container {
+      max-width: 500px;
+      margin: auto;
+      background-color: white;
+      padding: 30px 25px;
+      border-radius: 12px;
+      box-shadow: 0 4px 10px var(--ombre);
+    }
+
+    label {
+      font-weight: bold;
+      margin-top: 15px;
+      display: block;
+      color: #333;
+    }
+
+    input, select {
+      margin-top: 6px;
+      margin-bottom: 12px;
+      padding: 10px;
+      width: 100%;
+      border: 1px solid #ccc;
+      border-radius: 6px;
+      box-sizing: border-box;
+    }
+
+    button {
+      width: 100%;
+      padding: 12px;
+      background-color: var(--vert);
+      border: none;
+      border-radius: 6px;
+      color: white;
+      font-weight: bold;
+      font-size: 16px;
+      margin-top: 20px;
+      cursor: pointer;
+      transition: background-color 0.3s;
+    }
+
+    button:hover {
+      background-color: var(--vert-foncé);
+    }
+
+    #message {
+      margin-top: 20px;
+      text-align: center;
+      font-weight: bold;
+      font-size: 16px;
+    }

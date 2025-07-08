@@ -77,6 +77,8 @@ CREATE TABLE ef_pret_db_remboursement (
     id_remboursement INT AUTO_INCREMENT PRIMARY KEY,
     id_pret INT NOT NULL,
     date_paiement DATE NOT NULL,
+    mois INT NOT NULL,
+    annee INT NOT NULL,
     FOREIGN KEY (id_pret) REFERENCES ef_pret_db_pret(id_pret)
 );
 

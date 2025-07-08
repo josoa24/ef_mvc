@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <title>Ajout Remboursement</title>
+
+  <link rel="stylesheet" href="assets/css/remboursement.css">
+
+</head>
+<body>
+
+  <h1>Ajout d'un Remboursement</h1>
+
+  <div class="container">
+    <label for="id_pret">Prêt :</label>
+    <select id="id_pret" required>
+      <option value="">-- Sélectionner un prêt --</option>
+    </select>
+
+    <label for="date_paiement">Date de paiement :</label>
+    <input type="date" id="date_paiement" required>
+
+    <label for="mois">Mois :</label>
+    <input type="number" id="mois" min="1" max="12" required>
+
+    <label for="annee">Année :</label>
+    <input type="number" id="annee" min="2000" required>
+
+    <button id="valider-btn">Valider</button>
+
+    <div id="message"></div>
+  </div>
+
+  <script src="url.js"></script>
+
+  <script>
+    document.addEventListener("DOMContentLoaded", () => {
+      const selectPret = document.getElementById("id_pret");
+      const btnValider = document.getElementById("valider-btn");
+      const message = document.getElementById("message");
+
+      const datePaiement = document.getElementById("date_paiement");
+      const mois = document.getElementById("mois");
+      const annee = document.getElementById("annee");
+
+      // Charger les prêts
+      fetch(apiBase + "/remboursements/prets")
+        .then(res => res.json())
+        .then(data => {
+          if (Array.isArray(data)) {
+            data.forEach(p => {
+              const option = document.createElement("option");
+              option.value = p.id_pret;
+              option.textContent = `${p.nom_client} - Prêt #${p.id_pret}`;
+              selectPret.appendChild(option);
+            });
+          } else {
+            message.style.color = "red";
+            message.textContent = "Erreur lors du chargement des prêts.";
+          }
+        })
+        .catch(err => {
+          console.error("Erreur réseau :", err);
+          message.style.color = "red";
+          message.textContent = "Erreur réseau.";
+        });
+
+      // Envoi via bouton
+      btnValider.addEventListener("click", () => {
+        if (!selectPret.value || !datePaiement.value || !mois.value || !annee.value) {
+          message.style.color = "red";
+          message.textContent = "Veuillez remplir tous les champs.";
+          return;
+        }
+
+        const data = new URLSearchParams();
+        data.append("id_pret", selectPret.value);
+        data.append("date_paiement", datePaiement.value);
+        data.append("mois", mois.value);
+        data.append("annee", annee.value);
+
+        fetch(apiBase + "/remboursements", {
+          method: "POST",
+          body: data
+        })
+          .then(res => res.json())
+          .then(result => {
+            message.style.color = result.success ? "green" : "red";
+            message.textContent = result.message;
+            if (result.success) {
+              selectPret.value = "";
+              datePaiement.value = "";
+              mois.value = "";
+              annee.value = "";
+            }
+          })
+          .catch(err => {
+            console.error("Erreur lors de l'envoi :", err);
+            message.style.color = "red";
+            message.textContent = "Erreur lors de l'envoi.";
+          });
+      });
+    });
+  </script>
+
+</body>
+</html>

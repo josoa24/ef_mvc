@@ -4,7 +4,7 @@ function getDB()
     $host = 'localhost';
     $dbname = 'ef_pret_db';
     $username = 'root';
-    $password = 'ETU003234M.';
+    $password = '';
 
     try {
         return new PDO("mysql:host=$host;dbname=$dbname;charset=utf8", $username, $password, [
