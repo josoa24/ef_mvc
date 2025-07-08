@@ -77,7 +77,21 @@ CREATE TABLE ef_pret_db_remboursement (
     id_remboursement INT AUTO_INCREMENT PRIMARY KEY,
     id_pret INT NOT NULL,
     date_paiement DATE NOT NULL,
+    mois int not NULL,
+    annee int not NULL,
     FOREIGN KEY (id_pret) REFERENCES ef_pret_db_pret(id_pret)
 );
 
 
+
+
+SELECT 
+    r.mois,
+    r.annee,
+    SUM(p.montant * (tp.taux / 100)) AS interet_total
+FROM ef_pret_db_remboursement r
+JOIN ef_pret_db_pret p ON r.id_pret = p.id_pret
+JOIN ef_pret_db_taux_pret tp ON p.id_taux_pret = tp.id_taux_pret
+WHERE 1
+GROUP BY r.annee, r.mois
+ORDER BY r.annee, r.mois;
