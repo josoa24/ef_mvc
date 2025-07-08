@@ -3,9 +3,9 @@
   <head>
     <meta charset="UTF-8" />
     <title>Document</title>
+    <script src="url.js"></script>
     <script>
       function envoyerPret() {
-        const apiBase = "http://localhost/S4/ef_mvc/ws";
         const formData = new FormData();
         formData.append("montant", document.getElementById("montant").value);
         formData.append("mois", document.getElementById("mois").value);

@@ -1,1 +1,1 @@
-const apiBase = "http://localhost/S4/ef_mvc/ws";
+const apiBase = "http://localhost/ef_mvc/ws";
