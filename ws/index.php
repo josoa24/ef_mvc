@@ -10,5 +10,6 @@ require 'routes/ajout_fonds_routes.php';
 require 'routes/pret_routes.php';
 require 'routes/taux_pret_routes.php';
 require 'routes/interets_graphiques_routes.php';
+require 'routes/montant_routes.php';
 
 Flight::start();
