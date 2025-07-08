@@ -14,7 +14,6 @@
     --navbar-height: 70px;
 }
 
-/* Reset et base */
 * {
     margin: 0;
     padding: 0;
@@ -27,6 +26,7 @@ body {
     color: var(--dark-color);
     line-height: 1.6;
 }
+
 
 /* Navigation Top Bar */
 .top-navbar {
@@ -110,6 +110,7 @@ body {
     position: fixed;
     top: var(--navbar-height);
     left: 0;
+    gap: 10rem;
     width: var(--sidebar-width);
     height: calc(100vh - var(--navbar-height));
     background-color: white;
