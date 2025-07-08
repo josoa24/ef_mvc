@@ -13,7 +13,6 @@
   --navbar-height: 70px;
 }
 
-/* Reset et base */
 * {
   margin: 0;
   padding: 0;
@@ -26,6 +25,7 @@ body {
   color: var(--dark-color);
   line-height: 1.6;
 }
+
 
 /* Navigation Top Bar */
 .top-navbar {
@@ -122,16 +122,17 @@ body {
 
 /* Sidebar */
 .sidebar {
-  position: fixed;
-  top: var(--navbar-height);
-  left: 0;
-  width: var(--sidebar-width);
-  height: calc(100vh - var(--navbar-height));
-  background-color: white;
-  border-right: 1px solid var(--border-color);
-  box-shadow: 2px 0 10px var(--shadow-color);
-  overflow-y: auto;
-  z-index: 999;
+    position: fixed;
+    top: var(--navbar-height);
+    left: 0;
+    gap: 10rem;
+    width: var(--sidebar-width);
+    height: calc(100vh - var(--navbar-height));
+    background-color: white;
+    border-right: 1px solid var(--border-color);
+    box-shadow: 2px 0 10px var(--shadow-color);
+    overflow-y: auto;
+    z-index: 999;
 }
 
 .sidebar-header {
